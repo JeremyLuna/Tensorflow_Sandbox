@@ -16,7 +16,9 @@ const ys = tf.tensor2d([1, 3, 5, 7], [4, 1]);
 model.fit(xs, ys, {epochs: 10}).then(() => {
   // Use the model to do inference on a data point the model hasn't seen before:
   // Open the browser devtools to see the output
-  document.write(model.predict(tf.tensor2d([5], [1, 1])));
+  document.write(
+    "<p> ", model.predict(tf.tensor2d([5], [1, 1])), " </p>"
+  );
 });
 
 function hasGetUserMedia() {
