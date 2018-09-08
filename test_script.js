@@ -18,3 +18,14 @@ model.fit(xs, ys, {epochs: 10}).then(() => {
   // Open the browser devtools to see the output
   document.write(model.predict(tf.tensor2d([5], [1, 1])));
 });
+
+function hasGetUserMedia() {
+  return !!(navigator.mediaDevices &&
+    navigator.mediaDevices.getUserMedia);
+}
+
+if (hasGetUserMedia()) {
+  alert('getUserMedia() is supported by your browser');
+} else {
+  alert('getUserMedia() is not supported by your browser');
+}
