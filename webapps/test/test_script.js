@@ -20,14 +20,3 @@ model.fit(xs, ys, {epochs: 10}).then(() => {
     "<p> ", model.predict(tf.tensor2d([5], [1, 1])), " </p>"
   );
 });
-
-function hasGetUserMedia() {
-  return !!(navigator.mediaDevices &&
-    navigator.mediaDevices.getUserMedia);
-}
-
-if (hasGetUserMedia()) {
-  alert('getUserMedia() is supported by your browser');
-} else {
-  alert('getUserMedia() is not supported by your browser');
-}
