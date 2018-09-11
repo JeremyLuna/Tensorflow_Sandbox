@@ -9,6 +9,7 @@
 
 import {Webcam} from './webcam';
 
+const video = document.querySelector('video');
 navigator.mediaDevices.getUserMedia({video: true}).then((stream) => {video.srcObject = stream});
 
 // A webcam class that generates Tensors from the images from the webcam.
