@@ -7,7 +7,7 @@
 //      https://github.com/tensorflow/tfjs-examples/tree/master/webcam-transfer-learning
 // https://medium.com/tensorflow/a-gentle-introduction-to-tensorflow-js-dba2e5257702
 
-// import {Webcam} from './webcam';
+import {Webcam} from './webcam';
 
 // TODO: use
 //      window.screen.availHeight
