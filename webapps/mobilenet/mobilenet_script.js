@@ -15,6 +15,6 @@ navigator.mediaDevices.getUserMedia({video: true}).then((stream) => {video.srcOb
 const webcam = new Webcam(document.getElementById('webcam'));
 webcam.setup();
 
-while (true) {
-    document.getElementById("brightness").innerHTML = "Have a nice day!";
-}
+// while (true) {
+//     document.getElementById("brightness").innerHTML = "Have a nice day!";
+// }
