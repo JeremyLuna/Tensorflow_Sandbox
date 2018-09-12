@@ -1,6 +1,10 @@
-// learning from https://www.tensorflow.org/guide/saved_model#models
-// https://github.com/tensorflow/tfjs-converter
-// https://js.tensorflow.org/api/0.11.2/#loadModel
+// learning from
+// saving tf python models:
+//      https://www.tensorflow.org/guide/saved_model#models
+// converting to tf js model:
+//      https://github.com/tensorflow/tfjs-converter
+// loading tf js model
+//      https://js.tensorflow.org/api/0.11.2/#loadModel
 
 
 // stream from camera
@@ -12,7 +16,7 @@ video.height = 28;
 function calc_brightness(){
       // Reads the image as a Tensor from the webcam <video> element.
       net = tf.fromPixels(video);
-      net = tf.mean(net);
+      net = tf.mean(net, [2])
       document.getElementById("digit").innerHTML = net;
 }
 
