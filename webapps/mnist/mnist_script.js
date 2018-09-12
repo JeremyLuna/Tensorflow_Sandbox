@@ -1,3 +1,7 @@
+// learning from https://www.tensorflow.org/guide/saved_model#models
+// https://github.com/tensorflow/tfjs-converter
+// https://js.tensorflow.org/api/0.11.2/#loadModel
+
 
 // stream from camera
 const video = document.getElementById("webcam");
