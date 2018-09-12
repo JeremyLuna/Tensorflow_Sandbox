@@ -19,19 +19,6 @@ function calc_brightness(){
       net = tf.fromPixels(video);
       net = tf.mean(net);
       document.getElementById("brightness").innerHTML = net;
-    //   document.getElementById("brightness").innerHTML = "test";
-
-}
-
-function test_calc_brightness(){
-    image = new ImageData(1, 1);
-    image.data[0] = 100;
-    image.data[1] = 150;
-    image.data[2] = 200;
-    image.data[3] = 255;
-
-    net = tf.fromPixels(image).mean();
-    document.getElementById("brightness").innerHTML = net;
 }
 
 setInterval(calc_brightness, 1000);
