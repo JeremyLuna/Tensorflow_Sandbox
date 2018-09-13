@@ -13,11 +13,17 @@ navigator.mediaDevices.getUserMedia({video: true}).then((stream) => {video.srcOb
 video.width = 28;
 video.height = 28;
 
+const loaded_model = await tf.loadModel('js_model_saves');
+
 function calc_brightness(){
       // Reads the image as a Tensor from the webcam <video> element.
-      net = tf.fromPixels(video);
-      net = tf.mean(net, [2])
-      document.getElementById("digit").innerHTML = net;
+      preprocessor = tf.fromPixels(video);
+      preprocessor = tf.mean(preprocessor, 2);
+      preprocessor = tf.expandDims(preprocessor, 0);
+      output = loaded_model.predict(preprocessor);
+      // TODO: take max, to just return the esimate
+      // TODO: normalize in preprocessor?
+      document.getElementById("digit").innerHTML = output;
 }
 
 setInterval(calc_brightness, 1000);
