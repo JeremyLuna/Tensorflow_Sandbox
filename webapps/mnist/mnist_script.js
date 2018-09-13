@@ -17,13 +17,13 @@ const loaded_model = await tf.loadModel('js_model_saves');
 
 function calc_brightness(){
       // Reads the image as a Tensor from the webcam <video> element.
-      preprocessor = tf.fromPixels(video);
-      preprocessor = tf.mean(preprocessor, 2);
-      preprocessor = tf.expandDims(preprocessor, 0);
-      output = loaded_model.predict(preprocessor);
-      // TODO: take max, to just return the esimate
-      // TODO: normalize in preprocessor?
-      document.getElementById("digit").innerHTML = output;
+      // preprocessor = tf.fromPixels(video);
+      // preprocessor = tf.mean(preprocessor, 2);
+      // preprocessor = tf.expandDims(preprocessor, 0);
+      // output = loaded_model.predict(preprocessor);
+      // // TODO: take max, to just return the esimate
+      // // TODO: normalize in preprocessor?
+      // document.getElementById("digit").innerHTML = output;
 }
 
 setInterval(calc_brightness, 1000);
