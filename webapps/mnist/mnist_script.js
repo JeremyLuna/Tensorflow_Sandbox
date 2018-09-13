@@ -13,7 +13,7 @@ navigator.mediaDevices.getUserMedia({video: true}).then((stream) => {video.srcOb
 video.width = 28;
 video.height = 28;
 
-model = tf.loadModel("https://jeremyluna.github.io/Tensorflow_Sandbox/webapps/mnist/js_model/js_saved_model-.json");
+model = tf.loadModel("https://jeremyluna.github.io/Tensorflow_Sandbox/webapps/mnist/js_model/js_saved_model.json");
 
 function calc_brightness(){
       // Reads the image as a Tensor from the webcam <video> element.
