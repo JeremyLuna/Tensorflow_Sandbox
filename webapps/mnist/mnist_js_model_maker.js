@@ -251,7 +251,7 @@ async function mnist() {
   console.log("trained");
   showPredictions();
   console.log("predicted");
-  await model.save("downloads://js_saved_model/");
+  await model.save("downloads://js_saved_model");
 }
 
 mnist();
