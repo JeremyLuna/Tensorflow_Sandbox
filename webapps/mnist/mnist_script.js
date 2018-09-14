@@ -13,17 +13,32 @@ navigator.mediaDevices.getUserMedia({video: true}).then((stream) => {video.srcOb
 video.width = 28;
 video.height = 28;
 
-model = tf.loadModel("https://jeremyluna.github.io/Tensorflow_Sandbox/webapps/mnist/saved_model/js_saved_model.json");
+model = "temp";
+let interval_id;
+
+async function setup(){
+    try {
+        model = await tf.loadModel("https://jeremyluna.github.io/Tensorflow_Sandbox/webapps/mnist/saved_model/js_saved_model.json",
+                               strict = false);
+    } catch (err) {
+        console.log("Error: ", err);
+    }
+}
 
 function calc_brightness(){
+    console.log("Model: ", model);
       // Reads the image as a Tensor from the webcam <video> element.
       preprocessor = tf.fromPixels(video);
       preprocessor = tf.mean(preprocessor, 2);
       preprocessor = tf.expandDims(preprocessor, 0);
-      output = loaded_model.predict(preprocessor);
+      preprocessor = tf.expandDims(preprocessor, 3);
+      output = model.predict(preprocessor);
       // TODO: take max, to just return the esimate
       // TODO: normalize in preprocessor?
       document.getElementById("digit").innerHTML = output;
 }
 
-setInterval(calc_brightness, 1000);
+setup();
+
+// calc_brightness();
+interval_id = setInterval(calc_brightness, 1000);
