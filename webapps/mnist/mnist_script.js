@@ -33,9 +33,8 @@ function calc_brightness(){
       preprocessor = tf.expandDims(preprocessor, 0);
       preprocessor = tf.expandDims(preprocessor, 3);
       output = model.predict(preprocessor);
-      // TODO: take max, to just return the esimate
-      // TODO: normalize in preprocessor?
-      document.getElementById("digit").innerHTML = output;
+      output = tf.argMax(output);
+      document.getElementById("digit").innerHTML = output.get(0);
 }
 
 setup();
