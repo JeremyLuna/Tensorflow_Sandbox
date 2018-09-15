@@ -26,15 +26,15 @@ async function setup(){
 }
 
 function calc_brightness(){
-    console.log("Model: ", model);
-      // Reads the image as a Tensor from the webcam <video> element.
-      preprocessor = tf.fromPixels(video);
-      preprocessor = tf.mean(preprocessor, 2);
-      preprocessor = tf.expandDims(preprocessor, 0);
-      preprocessor = tf.expandDims(preprocessor, 3);
-      output = model.predict(preprocessor);
-      // output = tf.argMax(output);
-      // document.getElementById("digit").innerHTML = output.get(0);
+    // Reads the image as a Tensor from the webcam <video> element.
+    preprocessor = tf.fromPixels(video);
+    preprocessor = tf.mean(preprocessor, 2);
+    preprocessor = tf.expandDims(preprocessor, 0);
+    preprocessor = tf.expandDims(preprocessor, 3);
+    output = model.predict(preprocessor);
+    output = tf.argMax(output, 1);
+    document.getElementById("digit").innerHTML = "Digit: " + output.get([0]);
+    // document.getElementById("digit").innerHTML = output;
 }
 
 setup();
