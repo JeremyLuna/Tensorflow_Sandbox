@@ -9,7 +9,7 @@
 // stream from camera
 const video = document.getElementById("webcam");
 // navigator.mediaDevices.getUserMedia({video: true).then((stream) => {video.srcObject = stream});
-navigator.mediaDevices.getUserMedia({video: { width: 28, height: 28 }}).then((stream) => {video.srcObject = stream});
+// navigator.mediaDevices.getUserMedia({video: { width: 28, height: 28 }}).then((stream) => {video.srcObject = stream});
 
 
 model = "temp";
