@@ -6,12 +6,12 @@ layout: default
     <!-- Load TensorFlow.js -->
     <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@0.12.5"> </script>
 
-    <h1> Identify Handwritten Digits 1 (White text on black background) </h1>
+    <h1> Identify Handwritten Digits (White text on black background) </h1>
     <label for="audioSource">Audio source: </label><select id="audioSource"></select>
     <label for="videoSource">Video source: </label><select id="videoSource"></select>
     <h2 id="digit"></h2>
 
-    <video muted autoplay id="webcam" width="320" height="240" controls></video>
+    <video muted autoplay id="webcam" style="width: 200px; height: 200px;"></video>
 
     <script src="webcam.js"></script>
 
