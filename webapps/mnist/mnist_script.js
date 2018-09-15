@@ -33,7 +33,7 @@ function calc_digit(){
     preprocessor = tf.expandDims(preprocessor, 3);
     output = model.predict(preprocessor);
     output = tf.argMax(output, 1);
-    document.getElementById("digit").innerHTML = "Digit: " + preprocessor + output.get([0]);
+    document.getElementById("digit").innerHTML = "Digit: " + output.get([0]);
     // document.getElementById("digit").innerHTML = output;
 }
 
