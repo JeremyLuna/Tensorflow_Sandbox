@@ -10,8 +10,8 @@
 const video = document.getElementById("webcam");
 // navigator.mediaDevices.getUserMedia({video: true).then((stream) => {video.srcObject = stream});
 navigator.mediaDevices.getUserMedia({video: { width: 28, height: 28 }}).then((stream) => {video.srcObject = stream});
-video.width = window.screen.availWidth;
-video.height = window.screen.availHeight;
+video.width = screen.availWidth;
+video.height = screen.availHeight;
 
 
 model = "temp";
