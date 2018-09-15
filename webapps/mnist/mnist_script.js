@@ -28,7 +28,7 @@ function calc_digit(){
     // Reads the image as a Tensor from the webcam <video> element.
     preprocessor = tf.fromPixels(video);
     preprocessor = tf.mean(preprocessor, 2);
-    preprocessor = tf.sub(255, preprocessor);
+    // preprocessor = tf.sub(255, preprocessor);
     preprocessor = tf.expandDims(preprocessor, 0);
     preprocessor = tf.expandDims(preprocessor, 3);
     output = model.predict(preprocessor);
