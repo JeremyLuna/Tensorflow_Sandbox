@@ -9,10 +9,9 @@
 // stream from camera
 const video = document.getElementById("webcam");
 navigator.mediaDevices.getUserMedia({video: true}).then((stream) => {video.srcObject = stream});
-// video.width = 28;
-// video.height = 28;
-video.width = window.screen.availHeight;
-video.height = window.screen.availWidth;
+video.width = 28;
+video.height = 28;
+
 
 model = "temp";
 let interval_id;
