@@ -6,6 +6,8 @@
 // loading tf js model
 //      https://js.tensorflow.org/api/0.11.2/#loadModel
 
+// TODO: normalize input
+// TODO: mute video
 
 // stream from camera
 const video = document.getElementById("webcam");
