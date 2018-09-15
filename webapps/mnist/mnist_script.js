@@ -24,7 +24,7 @@ async function setup(){
     }
 }
 
-function calc_brightness(){
+function calc_digit(){
     // Reads the image as a Tensor from the webcam <video> element.
     preprocessor = tf.fromPixels(video);
     preprocessor = tf.mean(preprocessor, 2);
@@ -39,4 +39,4 @@ function calc_brightness(){
 setup();
 
 // calc_brightness();
-interval_id = setInterval(calc_brightness, 1000);
+interval_id = setInterval(calc_digit, 1000);
