@@ -2,10 +2,7 @@
 layout: default
 ---
 <body>
-    <!-- TODO: eliminate redundant camera permission requests -->
 
-    <!-- Load TensorFlow.js -->
-    <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@0.12.5"> </script>
 
     <h1> Identify Handwritten Digits </h1> <br />
 
@@ -26,6 +23,8 @@ layout: default
                             document.getElementById("webcam"));
     </script>
 
+    <!-- Load TensorFlow.js -->
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@0.12.5"> </script>
     <script src="mnist_script.js"></script>
 
 </body>
