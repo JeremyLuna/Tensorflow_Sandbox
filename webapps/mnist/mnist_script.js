@@ -6,14 +6,13 @@
 // loading tf js model
 //      https://js.tensorflow.org/api/0.11.2/#loadModel
 
-// TODO: normalize input
-// TODO: mute video
-
 // stream from camera
 const video = document.getElementById("webcam");
 navigator.mediaDevices.getUserMedia({video: true}).then((stream) => {video.srcObject = stream});
-video.width = 28;
-video.height = 28;
+// video.width = 28;
+// video.height = 28;
+video.width = window.screen.availHeight;
+video.height = window.screen.availWidth;
 
 model = "temp";
 let interval_id;
