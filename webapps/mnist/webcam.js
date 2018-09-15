@@ -17,15 +17,21 @@ limitations under the License.
 
 'use strict';
 
-var videoElement = document.querySelector('video');
-var audioSelect = document.querySelector('select#audioSource');
-var videoSelect = document.querySelector('select#videoSource');
+let audioSelect;
+let videoSelect;
+let videoElement;
 
-navigator.mediaDevices.enumerateDevices()
-  .then(gotDevices).then(getStream).catch(handleError);
+function wire_device_control(audio_selector, video_selector, video_element){
+    audioSelect = audio_selector;
+    videoSelect = video_selector;
+    videoElement = video_element;
 
-audioSelect.onchange = getStream;
-videoSelect.onchange = getStream;
+    navigator.mediaDevices.enumerateDevices()
+      .then(gotDevices).then(getStream).catch(handleError);
+
+    audioSelect.onchange = getStream;
+    videoSelect.onchange = getStream;
+}
 
 function gotDevices(deviceInfos) {
   for (var i = 0; i !== deviceInfos.length; ++i) {
