@@ -12,7 +12,7 @@ visHEIGHT = viscanvas.height;
 // create neural net
 var layer_defs, net, trainer;
 var t = "\n\
-input = tf.input({shape: [2]);\n\
+input = tf.input({shape: [2]});\n\
 \n\
 dense1 = tf.layers.dense({units: 3, activation: 'relu'});\n\
 dense2 = tf.layers.dense({units: 2, activation: 'linear'});\n\
@@ -20,19 +20,19 @@ dense2 = tf.layers.dense({units: 2, activation: 'linear'});\n\
 output = dense2.apply(dense1.apply(input));\n\
 net = tf.model({inputs: input, outputs: output});\n\
 \n\
-net.compile({loss: 'softmaxCrossEntropy', optimizer: 'sgd'});\n\
+net.compile({loss: 'meanSquaredError', optimizer: 'sgd'});\n\
 ";
 
 function reload() {
   eval(document.getElementById('layerdef').value);
   // enter buttons for layers
-  var t = '';
-  for(var i=1;i<net.layers.length-1;i++) { // ignore input and regression layers (first and last)
-    var butid = "button" + i;
-    t += "<input id=\""+butid+"\" value=\"" + net.layers[i].layer_type + "(" + net.layers[i].out_depth + ")" +"\" type=\"submit\" onclick=\"updateLix("+i+")\" style=\"width:80px; height: 30px; margin:5px;\";>";
-  }
-  document.getElementById('layer_ixes').innerHTML = t;
-  document.getElementById('cyclestatus').value = 'drawing neurons ' + d0 + ' and ' + d1 + ' of layer with index ' + lix + ' (' + net.layers[lix].layer_type + ')';
+  // var t = '';
+  // for(var i=1;i<net.layers.length-1;i++) { // ignore input and regression layers (first and last)
+  //   var butid = "button" + i;
+  //   t += "<input id=\""+butid+"\" value=\"" + net.layers[i].layer_type + "(" + net.layers[i].out_depth + ")" +"\" type=\"submit\" onclick=\"updateLix("+i+")\" style=\"width:80px; height: 30px; margin:5px;\";>";
+  // }
+  // document.getElementById('layer_ixes').innerHTML = t;
+  // document.getElementById('cyclestatus').value = 'drawing neurons ' + d0 + ' and ' + d1 + ' of layer with index ' + lix + ' (' + net.layers[lix].layer_type + ')';
 }
 function updateLix(newlix) {
   lix = newlix;
@@ -41,7 +41,6 @@ function updateLix(newlix) {
   document.getElementById('cyclestatus').value = 'drawing neurons ' + d0 + ' and ' + d1 + ' of layer with index ' + lix + ' (' + net.layers[lix].layer_type + ')';
 
 }
-
 
 function myinit() { }
 
@@ -73,60 +72,64 @@ function original_data(){
   N = labels.length;
 }
 
-function circle_data() {
-  data = [];
-  labels = [];
-  for(var i=0;i<50;i++) {
-    var r = convnetjs.randf(0.0, 2.0);
-    var t = convnetjs.randf(0.0, 2*Math.PI);
-    data.push([r*Math.sin(t), r*Math.cos(t)]);
-    labels.push(1);
-  }
-  for(var i=0;i<50;i++) {
-    var r = convnetjs.randf(3.0, 5.0);
-    //var t = convnetjs.randf(0.0, 2*Math.PI);
-    var t = 2*Math.PI*i/50.0
-    data.push([r*Math.sin(t), r*Math.cos(t)]);
-    labels.push(0);
-  }
-  N = data.length;
-}
+// function circle_data() {
+//   data = [];
+//   labels = [];
+//   for(var i=0;i<50;i++) {
+//     var r = convnetjs.randf(0.0, 2.0);
+//     var t = convnetjs.randf(0.0, 2*Math.PI);
+//     data.push([r*Math.sin(t), r*Math.cos(t)]);
+//     labels.push(1);
+//   }
+//   for(var i=0;i<50;i++) {
+//     var r = convnetjs.randf(3.0, 5.0);
+//     //var t = convnetjs.randf(0.0, 2*Math.PI);
+//     var t = 2*Math.PI*i/50.0
+//     data.push([r*Math.sin(t), r*Math.cos(t)]);
+//     labels.push(0);
+//   }
+//   N = data.length;
+// }
+//
+// function spiral_data() {
+//   data = [];
+//   labels = [];
+//   var n = 100;
+//   for(var i=0;i<n;i++) {
+//     var r = i/n*5 + convnetjs.randf(-0.1, 0.1);
+//     var t = 1.25*i/n*2*Math.PI + convnetjs.randf(-0.1, 0.1);
+//     data.push([r*Math.sin(t), r*Math.cos(t)]);
+//     labels.push(1);
+//   }
+//   for(var i=0;i<n;i++) {
+//     var r = i/n*5 + convnetjs.randf(-0.1, 0.1);
+//     var t = 1.25*i/n*2*Math.PI + Math.PI + convnetjs.randf(-0.1, 0.1);
+//     data.push([r*Math.sin(t), r*Math.cos(t)]);
+//     labels.push(0);
+//   }
+//   N = data.length;
+// }
 
-function spiral_data() {
-  data = [];
-  labels = [];
-  var n = 100;
-  for(var i=0;i<n;i++) {
-    var r = i/n*5 + convnetjs.randf(-0.1, 0.1);
-    var t = 1.25*i/n*2*Math.PI + convnetjs.randf(-0.1, 0.1);
-    data.push([r*Math.sin(t), r*Math.cos(t)]);
-    labels.push(1);
-  }
-  for(var i=0;i<n;i++) {
-    var r = i/n*5 + convnetjs.randf(-0.1, 0.1);
-    var t = 1.25*i/n*2*Math.PI + Math.PI + convnetjs.randf(-0.1, 0.1);
-    data.push([r*Math.sin(t), r*Math.cos(t)]);
-    labels.push(0);
-  }
-  N = data.length;
-}
+// here
 
-function update(){
+async function update(){
   // forward prop the data
 
   var start = new Date().getTime();
 
-  var x = new convnetjs.Vol(1,1,2);
-  //x.w = data[ix];
+  //var x = new convnetjs.Vol(1,1,2);
   var avloss = 0.0;
   for(var iters=0;iters<20;iters++) {
     for(var ix=0;ix<N;ix++) {
-      x.w = data[ix];
-      var stats = trainer.train(x, labels[ix]);
-      avloss += stats.loss;
+      // x.w = data[ix];
+      // var stats = trainer.train(x, labels[ix]);
+      x = tf.tensor([data[ix]]);
+      y = tf.oneHot(tf.tensor([0, labels[ix]]).asType('int32'), 2);
+      const h = await net.fit(x, y);
+      // avloss += stats.loss;
     }
   }
-  avloss /= N*iters;
+  // avloss /= N*iters;
 
   var end = new Date().getTime();
   var time = end - start;
@@ -134,14 +137,14 @@ function update(){
   //console.log('loss = ' + avloss + ', 100 cycles through data in ' + time + 'ms');
 }
 
-function cycle() {
-  var selected_layer = net.layers[lix];
-  d0 += 1;
-  d1 += 1;
-  if(d1 >= selected_layer.out_depth) d1 = 0; // and wrap
-  if(d0 >= selected_layer.out_depth) d0 = 0; // and wrap
-  document.getElementById('cyclestatus').value = 'drawing neurons ' + d0 + ' and ' + d1 + ' of layer #' + lix + ' (' + net.layers[lix].layer_type + ')';
-}
+// function cycle() {
+//   var selected_layer = net.layers[lix];
+//   d0 += 1;
+//   d1 += 1;
+//   if(d1 >= selected_layer.out_depth) d1 = 0; // and wrap
+//   if(d0 >= selected_layer.out_depth) d0 = 0; // and wrap
+//   document.getElementById('cyclestatus').value = 'drawing neurons ' + d0 + ' and ' + d1 + ' of layer #' + lix + ' (' + net.layers[lix].layer_type + ')';
+// }
 
 var lix = 4; // layer id to track first 2 neurons of
 var d0 = 0; // first dimension to show visualized
@@ -150,7 +153,8 @@ function draw(){
 
     ctx.clearRect(0,0,WIDTH,HEIGHT);
 
-    var netx = new convnetjs.Vol(1,1,2);
+    // var netx = new convnetjs.Vol(1,1,2);
+    var netx = [[2, 2]]; // just placeholders
     // draw decisions in the grid
     var density= 5.0;
     var gridstep = 2;
@@ -160,11 +164,13 @@ function draw(){
     for(var x=0.0, cx=0; x<=WIDTH; x+= density, cx++) {
       for(var y=0.0, cy=0; y<=HEIGHT; y+= density, cy++) {
         //var dec= svm.marginOne([(x-WIDTH/2)/ss, (y-HEIGHT/2)/ss]);
-        netx.w[0] = (x-WIDTH/2)/ss;
-        netx.w[1] = (y-HEIGHT/2)/ss;
-        var a = net.forward(netx, false);
+        netx[0][0] = (x-WIDTH/2)/ss;
+        netx[0][1] = (y-HEIGHT/2)/ss;
+        // var a = net.forward(netx, false);
+        var a = net.predict(tf.tensor(netx), {batchSize: 1, verbose: true});
 
-        if(a.w[0] > a.w[1]) ctx.fillStyle = 'rgb(250, 150, 150)';
+
+        if(a[0] > a[1]) ctx.fillStyle = 'rgb(250, 150, 150)';
         else ctx.fillStyle = 'rgb(150, 250, 150)';
 
         //ctx.fillStyle = 'rgb(150,' + Math.floor(a.w[0]*105)+150 + ',150)';
@@ -173,11 +179,11 @@ function draw(){
 
         if(cx%gridstep === 0 && cy%gridstep===0) {
           // record the transformation information
-          var xt = net.layers[lix].out_act.w[d0]; // in screen coords
-          var yt = net.layers[lix].out_act.w[d1]; // in screen coords
-          gridx.push(xt);
-          gridy.push(yt);
-          gridl.push(a.w[0] > a.w[1]); // remember final label as well
+          // var xt = net.layers[lix].out_act.w[d0]; // in screen coords
+          // var yt = net.layers[lix].out_act.w[d1]; // in screen coords
+          // gridx.push(xt);
+          // gridy.push(yt);
+          gridl.push(a[0] > a[1]); // remember final label as well
         }
       }
     }
@@ -251,15 +257,15 @@ function draw(){
       drawCircle(data[i][0]*ss+WIDTH/2, data[i][1]*ss+HEIGHT/2, 5.0);
 
       // also draw transformed data points while we're at it
-      netx.w[0] = data[i][0];
-      netx.w[1] = data[i][1]
-      var a = net.forward(netx, false);
-      var xt = visWIDTH * (net.layers[lix].out_act.w[d0] - mmx.minv) / mmx.dv; // in screen coords
-      var yt = visHEIGHT * (net.layers[lix].out_act.w[d1] - mmy.minv) / mmy.dv; // in screen coords
+      netx[0][0] = data[i][0];
+      netx[0][1] = data[i][1];
+      var a = net.predict(tf.tensor(netx), {batchSize: 1, verbose: true});
+      // var xt = visWIDTH * (net.layers[lix].out_act.w[d0] - mmx.minv) / mmx.dv; // in screen coords
+      // var yt = visHEIGHT * (net.layers[lix].out_act.w[d1] - mmy.minv) / mmy.dv; // in screen coords
       if(labels[i]==1) visctx.fillStyle = 'rgb(100,200,100)';
       else visctx.fillStyle = 'rgb(200,100,100)';
       visctx.beginPath();
-      visctx.arc(xt, yt, 5.0, 0, Math.PI*2, true);
+      // visctx.arc(xt, yt, 5.0, 0, Math.PI*2, true);
       visctx.closePath();
       visctx.stroke();
       visctx.fill();
@@ -308,6 +314,7 @@ function keyUp(key) {
 }
 
 document.getElementById('layerdef').value = t;
-circle_data();
+// circle_data();
+original_data();
 reload();
 NPGinit(20);

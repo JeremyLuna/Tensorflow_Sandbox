@@ -123,7 +123,9 @@ function NPGinit(FPS){
   document.addEventListener('keyup', eventKeyUp, true);
   document.addEventListener('keydown', eventKeyDown, true);
 
-  setInterval(NPGtick, 1000/FPS);
+  // setInterval(NPGtick, 1000/FPS);
+  setInterval(NPGtick, 5000);
+
 
   myinit();
 }
