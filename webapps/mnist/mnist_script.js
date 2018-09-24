@@ -1,4 +1,4 @@
-// learning from
+ // learning from
 // saving tf python models:
 //      https://www.tensorflow.org/guide/saved_model#models
 // converting to tf js model:
@@ -39,5 +39,4 @@ function calc_digit(){
 
 setup();
 
-// calc_brightness();
 interval_id = setInterval(calc_digit, 1000);
