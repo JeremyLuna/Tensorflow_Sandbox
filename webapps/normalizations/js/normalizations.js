@@ -18,10 +18,11 @@ var net;
 var t = "\n\
 input = tf.input({shape: [2]});\n\
 \n\
-dense1 = tf.layers.dense({units: 3, activation: 'relu'});\n\
-dense2 = tf.layers.dense({units: 2, activation: 'linear'});\n\
+dense1 = tf.layers.dense({units: 6, activation: 'relu', useBias: true});\n\
+dense2 = tf.layers.dense({units: 6, activation: 'relu', useBias: true});\n\
+dense3 = tf.layers.dense({units: 2, activation: 'linear', useBias: true});\n\
 \n\
-output = dense2.apply(dense1.apply(input));\n\
+output = dense3.apply(dense2.apply(dense1.apply(input)));\n\
 net = tf.model({inputs: input, outputs: output});\n\
 \n\
 net.compile({loss: tf.losses.softmaxCrossEntropy, optimizer: 'sgd'});\n\
@@ -49,6 +50,7 @@ function updateLix(newlix) {
 
 function myinit() {
     var im = [];
+    var density= 5.0;
     for(var x=0.0, cx=0; x<=WIDTH; x+= density, cx++) {
       if (cx > batch_size_x_res) batch_size_x_res = cx;
       for(var y=0.0, cy=0; y<=HEIGHT; y+= density, cy++) {
@@ -128,20 +130,16 @@ function original_data(){
 //   N = data.length;
 // }
 
-// here
-
 async function update(){
   for(var iters=0;iters<1000;iters++) { // epochs
     draw();
-    for(var ix=0;ix<N;ix++) {        // examples
-      x = tf.tidy(() => {
-          return tf.tensor([data[ix]]);
-      });
-      y = tf.tidy(() => {
-          return tf.oneHot(tf.tensor([labels[ix]]).asType('int32'), 2).asType('float32');
-      });
-      await net.fit(x, y);
-    }
+    x = tf.tidy(() => {
+      return tf.tensor(data);
+    });
+    y = tf.tidy(() => {
+      return tf.oneHot(tf.tensor(labels).asType('int32'), 2).asType('float32');
+    });
+    await net.fit(x, y, {batchSize: N});
   }
 }
 
@@ -166,8 +164,7 @@ async function draw(){
     var gridy = [];
     var gridl = [];
 
-
-    var a = await net.predict(tf.tensor(netx), {batchSize: batch_size_res}).data();
+    var a = await net.predict(netx, {batchSize: batch_size_res}).data();
     for(var x=0.0, cx=0; x<=WIDTH; x+= density, cx++) {
       for(var y=0.0, cy=0; y<=HEIGHT; y+= density, cy++) {
         if(a[(cx*batch_size_y_res + cy)*2] > a[(cx*batch_size_y_res + cy)*2 + 1]) ctx.fillStyle = 'rgb(250, 150, 150)';
@@ -238,7 +235,6 @@ async function draw(){
     ctx.strokeStyle = 'rgb(0,0,0)';
     ctx.lineWidth = 1;
     for(var i=0;i<N;i++) {
-
       if(labels[i]==1) ctx.fillStyle = 'rgb(100,200,100)';
       else ctx.fillStyle = 'rgb(200,100,100)';
 
