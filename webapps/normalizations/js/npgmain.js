@@ -122,9 +122,8 @@ function NPGinit(time_m){
   document.addEventListener('keydown', eventKeyDown, true);
 
   // setInterval(NPGtick, time_m);
-  NPGtick();
-
   myinit();
+  NPGtick();
 }
 
 function NPGtick() {

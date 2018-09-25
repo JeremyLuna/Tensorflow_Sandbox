@@ -17,10 +17,31 @@ var predict, loss, optimizer, train;
 var t = euclidian_model;
 
 async function reload() {
-  eval(document.getElementById('layerdef').value);
-  
+  // eval(document.getElementById('layerdef').value);
+
+feature = tf.variable(tf.randomNormal(shape=[4, 2], mean=0.5, stdDev=0.2));
+weights = tf.variable(tf.randomNormal(shape=[2, 4], mean=1.0, stdDev=0.2));
+biases = tf.variable(tf.randomNormal(shape=[2], mean=1.0, stdDev=0.2));
+predict = function(input){
+  return tf.tidy(function(){
+    net = tf.sub(feature, input);
+    net = tf.mul(net, net);
+    net = tf.sqrt(tf.sum(net, 1));
+    net = tf.matMul(weights, net).add(biases);
+    return net;
+  });
+};
+
+function loss(prediction, target){
+return tf.tidy(function(){
+  return tf.softmaxCrossEntropy(prediction, target);
+});
+}
+optimizer = tf.train.sgd(0.01);
+
+
   train = function(inputs, labels){
-    optimizer.minimize(function(inputs, labels) {
+    optimizer.minimize(function() {
       predictions = predict(inputs);
       stepLoss = loss(predictions, labels);
       return stepLoss;
@@ -31,6 +52,7 @@ async function reload() {
 
 function myinit() {
     var im = [];
+    pixel_count = 0;
     var density= 5.0;
     for(var x=0.0, cx=0; x<=WIDTH; x+= density, cx++) {
       if (cx > row_pixel_count) row_pixel_count = cx;
@@ -54,7 +76,7 @@ async function update(){
     y = tf.tidy(() => {
       return tf.oneHot(tf.tensor(dataset['labels']).asType('int32'), 2).asType('float32');
     });
-    await model.fit(x, y, {batchSize: N});
+    train(x, y);
   }
 }
 
@@ -70,7 +92,7 @@ async function draw(){
     var gridy = [];
     var gridl = [];
 
-    var a = await model.predict(netx, {batchSize: pixel_count}).data();
+    var a = predict(netx).data();
     for(var x=0.0, cx=0; x<=WIDTH; x+= density, cx++) {
       for(var y=0.0, cy=0; y<=HEIGHT; y+= density, cy++) {
         if(a[(cx*column_pixel_count + cy)*2] > a[(cx*column_pixel_count + cy)*2 + 1]) ctx.fillStyle = 'rgb(250, 150, 150)';
