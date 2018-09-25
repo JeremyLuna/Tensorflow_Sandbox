@@ -2,6 +2,8 @@
 // learned from https://cs.stanford.edu/people/karpathy/convnetjs/demo/classify2d.html
 
 // TODO: change to eager evaluation (can only use tf models with tf.layers, too restrictive)
+// eager mode training:
+//    https://medium.com/@tristansokol/basic-tutorial-with-tensorflow-js-linear-regression-aa68b16e5b8e
 
 var dataset, N;
 var ss = 50.0; // TODO: change scale
@@ -11,11 +13,19 @@ row_pixel_count = 0;
 column_pixel_count = 0;
 
 // create neural net
-var model;
-var t = conv_demo_model;
+var predict, loss, optimizer, train;
+var t = euclidian_model;
 
 async function reload() {
   eval(document.getElementById('layerdef').value);
+  
+  train = function(inputs, labels){
+    optimizer.minimize(function(inputs, labels) {
+      predictions = predict(inputs);
+      stepLoss = loss(predictions, labels);
+      return stepLoss;
+    });
+  };
   NPGinit(1000);
 }
 
