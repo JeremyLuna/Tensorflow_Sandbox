@@ -3,6 +3,10 @@
 
 var data, labels, N;
 var ss = 50.0; // scale for drawing
+var netx;
+batch_size_res = 0;
+batch_size_x_res = 0;
+batch_size_y_res = 0;
 
 viscanvas = document.getElementById('viscanvas');
 visctx = viscanvas.getContext('2d');
@@ -43,7 +47,20 @@ function updateLix(newlix) {
 
 }
 
-function myinit() { }
+function myinit() {
+    var im = [];
+    for(var x=0.0, cx=0; x<=WIDTH; x+= density, cx++) {
+      if (cx > batch_size_x_res) batch_size_x_res = cx;
+      for(var y=0.0, cy=0; y<=HEIGHT; y+= density, cy++) {
+        if (cy > batch_size_y_res) batch_size_y_res = cy;
+        batch_size_res++;
+        im.push([]);
+        im[batch_size_res-1].push((x-WIDTH/2)/ss);
+        im[batch_size_res-1].push((y-HEIGHT/2)/ss);
+      }
+    }
+    netx = tf.tensor(im);
+}
 
 function random_data(){
   data = [];
@@ -141,50 +158,21 @@ var lix = 4; // layer id to track first 2 neurons of
 var d0 = 0; // first dimension to show visualized
 var d1 = 1; // second dimension to show visualized
 async function draw(){
-
     ctx.clearRect(0,0,WIDTH,HEIGHT);
-
-    // var netx = new convnetjs.Vol(1,1,2);
-    var netx = []; // just placeholders
     // draw decisions in the grid
     var density= 5.0;
     var gridstep = 2;
     var gridx = [];
     var gridy = [];
     var gridl = [];
-    batch_size_res = 0;
-    batch_size_x_res = 0;
-    batch_size_y_res = 0;
-    for(var x=0.0, cx=0; x<=WIDTH; x+= density, cx++) {
-      if (cx > batch_size_x_res) batch_size_x_res = cx;
-      for(var y=0.0, cy=0; y<=HEIGHT; y+= density, cy++) {
-        if (cy > batch_size_y_res) batch_size_y_res = cy;
-        batch_size_res++;
-        netx.push([]);
-        netx[batch_size_res-1].push((x-WIDTH/2)/ss);
-        netx[batch_size_res-1].push((y-HEIGHT/2)/ss);
-      }
-    }
+
+
     var a = await net.predict(tf.tensor(netx), {batchSize: batch_size_res}).data();
     for(var x=0.0, cx=0; x<=WIDTH; x+= density, cx++) {
       for(var y=0.0, cy=0; y<=HEIGHT; y+= density, cy++) {
         if(a[(cx*batch_size_y_res + cy)*2] > a[(cx*batch_size_y_res + cy)*2 + 1]) ctx.fillStyle = 'rgb(250, 150, 150)';
         else ctx.fillStyle = 'rgb(150, 250, 150)';
-
-        //ctx.fillStyle = 'rgb(150,' + Math.floor(a.w[0]*105)+150 + ',150)';
-        //ctx.fillStyle = 'rgb(' + Math.floor(a.w[0]*255) + ',' + Math.floor(a.w[1]*255) + ', 0)';
         ctx.fillRect(x-density/2-1, y-density/2-1, density+2, density+2);
-
-        if(cx%gridstep === 0 && cy%gridstep===0) {
-          // record the transformation information
-          // var xt = net.layers[lix].out_act.w[d0]; // in screen coords
-          // var yt = net.layers[lix].out_act.w[d1]; // in screen coords
-          // var xt = a[(cx*batch_size_y_res + cy)*2]; // in screen coords
-          // var yt = a[(cx*batch_size_y_res + cy)*2 + 1]; // in screen coords
-          // gridx.push(xt);
-          // gridy.push(yt);
-          // gridl.push(a[0] > a[1]); // remember final label as well
-        }
       }
     }
 
