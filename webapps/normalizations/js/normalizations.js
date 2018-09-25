@@ -28,7 +28,7 @@ async function reload() {
       return stepLoss;
     });
   };
-  NPGinit(1000);
+
 }
 
 function myinit() {
@@ -149,3 +149,4 @@ function load_dataset(new_dataset){
 document.getElementById('layerdef').value = t;
 load_dataset(circle_dataset());
 reload();
+NPGinit(1000);
