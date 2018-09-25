@@ -10,19 +10,16 @@ layout: default
 <textarea id="layerdef" style="width:100%; height:200px;">
 </textarea>
 <br>
+
 <input id="buttontp" type="submit" value="change network" onclick="reload();" style="width: 300px; height: 50px;"/>
-
-<p>Feel free to change this, the text area above gets eval()'d when you hit the button and the network gets reloaded. Every 10th of a second, all points are fed to the network multiple times through the trainer class to train the network. The resulting predictions of the network are then "painted" under the data points to show you the generalization.</p>
-
-<p>On the right we visualize the transformed representation of all grid points in the original space and the data, for a given layer and only for 2 neurons at a time. The number in the bracket shows the total number of neurons at that level of representation. If the number is more than 2, you will only see the two visualized but you can cycle through all of them with the cycle button.</p>
 
 <div class="panes">
 <div class="pane">
     <canvas id="NPGcanvas" width="400" height="400">Browser not supported for Canvas. Get a real browser.</canvas>
-    <input id="buttondata1" type="submit" value="simple data" onclick="original_data();" style="width: 100px; height: 30px;"/>
-    <input id="buttondata2" type="submit" value="circle data" onclick="circle_data();" style="width: 100px; height: 30px;"/>
-    <input id="buttondata3" type="submit" value="spiral data" onclick="spiral_data();" style="width: 100px; height: 30px;"/><br>
-    <input id="buttondata4" type="submit" value="random data" onclick="random_data();" style="width: 100px; height: 30px;"/><br>
+    <input id="buttondata1" type="submit" value="simple data" onclick="load_dataset(original_dataset());" style="width: 100px; height: 30px;"/>
+    <input id="buttondata2" type="submit" value="circle data" onclick="load_dataset();" style="width: 100px; height: 30px;"/>
+    <input id="buttondata3" type="submit" value="spiral data" onclick="load_dataset();" style="width: 100px; height: 30px;"/><br>
+    <input id="buttondata4" type="submit" value="random data" onclick="load_dataset();" style="width: 100px; height: 30px;"/><br>
     <p>
         Controls:<br>
         <b>CLICK</b>: Add red data point<br>
@@ -31,16 +28,10 @@ layout: default
     </p>
 </div>
 
-<div class="pane">
-  <canvas id="viscanvas" width="400" height="400">Browser not supported for Canvas. Get a real browser.</canvas>
-<div id="cyclestatus"></div>
-
-<div id="layer_ixes"></div>
-    <input id="buttoncycle" type="submit" value="cycle through visualized neurons at selected layer (if more than 2)" onclick="cycle();" style="height: 40px;"/>
-</div>
-
-<script src="js/npgmain.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@0.12.5"> </script>
+<script src="js/models.js"></script>
+<script src="js/datasets.js"></script>
+<script src="js/npgmain.js"></script>
 <script src="js/util.js"></script>
 <script src="js/normalizations.js"></script>
 

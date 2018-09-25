@@ -2,9 +2,9 @@
 //Author: Andrej Karpathy
 //License: BSD
 //This function does all the boring canvas stuff. To use it, just create functions:
+//myinit()          gets called once in beginning
 //update()          gets called every frame
 //draw()            gets called every frame
-//myinit()          gets called once in beginning
 //mouseClick(x, y)  gets called on mouse click
 //keyUp(keycode)    gets called when key is released
 //keyDown(keycode)  gets called when key is pushed
@@ -108,8 +108,7 @@ function eventKeyDown(e) {
 }
 
 function NPGinit(time_m){
-  //takes frames per secont to run at
-
+  //takes miliseconds per training
   canvas = document.getElementById('NPGcanvas');
   ctx = canvas.getContext('2d');
   WIDTH = canvas.width;
