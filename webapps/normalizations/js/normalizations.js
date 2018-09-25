@@ -17,30 +17,7 @@ var predict, loss, optimizer, train;
 var t = euclidian_model;
 
 async function reload() {
-  // eval(document.getElementById('layerdef').value);
-
-feature = tf.variable(tf.randomNormal(shape=[2, 8], mean=0.5, stdDev=0.2));
-weights = tf.variable(tf.randomNormal(shape=[8, 2], mean=1.0, stdDev=0.2));
-biases = tf.variable(tf.randomNormal(shape=[1, 2], mean=1.0, stdDev=0.2));
-predict = function(input){
-  return tf.tidy(function(){
-    net = tf.expandDims(input, 2);
-    net = tf.sub(tf.expandDims(feature, 0), net);
-    net = tf.mul(net, net);
-    net = tf.sqrt(tf.sum(net, 1));
-    net = tf.matMul(net, weights).add(biases);
-    // net = tf.relu(net);
-    return net;
-  });
-};
-
-function loss(prediction, target){
-return tf.tidy(function(){
-  return tf.losses.softmaxCrossEntropy(prediction, target);
-});
-}
-optimizer = tf.train.sgd(0.01);
-
+  eval(document.getElementById('layerdef').value);
 
   train = function(inputs, labels){
     optimizer.minimize(function() {
@@ -97,7 +74,7 @@ async function draw(){
     var a = await predict(netx).data();
     for(var x=0.0, cx=0; x<=WIDTH; x+= density, cx++) {
       for(var y=0.0, cy=0; y<=HEIGHT; y+= density, cy++) {
-        if(a[(cx*column_pixel_count + cy)*2] > a[(cx*column_pixel_count + cy)*2 + 1]) ctx.fillStyle = 'rgb(250, 150, 150)';
+        if(a[(cx*(column_pixel_count + 1)+ cy)*2] > a[(cx*(column_pixel_count + 1) + cy)*2 + 1]) ctx.fillStyle = 'rgb(250, 150, 150)';
         else ctx.fillStyle = 'rgb(150, 250, 150)';
         ctx.fillRect(x-density/2-1, y-density/2-1, density+2, density+2);
       }
@@ -171,5 +148,5 @@ function load_dataset(new_dataset){
 }
 
 document.getElementById('layerdef').value = t;
-load_dataset(original_dataset());
+load_dataset(circle_dataset());
 reload();

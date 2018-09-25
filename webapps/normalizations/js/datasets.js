@@ -16,3 +16,28 @@ function original_dataset(){
   data.push([ 1.0   , -2.2   ]); labels.push(1);
   return {'data': data, 'labels': labels};
 }
+
+function circle_dataset(){
+  data = [];
+  labels = [];
+
+  for (x = 0.0; x <= 2*Math.PI; x += .1*Math.PI){
+    data.push([.5*Math.cos(x)+1.0, .5*Math.sin(x)+1.0]);
+    labels.push(0);
+  }
+  for (x = 0.0; x <= 2*Math.PI; x += .1*Math.PI){
+    data.push([.5*Math.cos(x)-1.0, .5*Math.sin(x)-1.0]);
+    labels.push(0);
+  }
+
+  for (x = 0.0; x <= 2*Math.PI; x += .1*Math.PI){
+    data.push([Math.cos(x)+1.0, Math.sin(x)+1.0]);
+    labels.push(1);
+  }
+  for (x = 0.0; x <= 2*Math.PI; x += .1*Math.PI){
+    data.push([Math.cos(x)-1.0, Math.sin(x)-1.0]);
+    labels.push(1);
+  }
+
+  return {'data': data, 'labels': labels};
+}
