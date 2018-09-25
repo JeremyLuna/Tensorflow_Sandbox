@@ -41,3 +41,36 @@ function circle_dataset(){
 
   return {'data': data, 'labels': labels};
 }
+
+function spiral_dataset(){
+  data = [];
+  labels = [];
+
+  for (x = 0.0; x <= 3*Math.PI; x += .1*Math.PI){
+    data.push([0.5*x*Math.cos(x), 0.5*x*Math.sin(x)]);
+    labels.push(0);
+  }
+
+  for (x = 0.0; x <= 3*Math.PI; x += .1*Math.PI){
+    data.push([0.5*x*Math.cos(x+Math.PI), 0.5*x*Math.sin(x+Math.PI)]);
+    labels.push(1);
+  }
+
+  return {'data': data, 'labels': labels};
+}
+
+function random_dataset(){
+  data = [];
+  labels = [];
+
+  for (x = 0; x < 10; x++){
+    data.push([randf(-4.0, 4.0), randf(-4.0, 4.0)]);
+    labels.push(0);
+  }
+  for (x = 0; x < 10; x++){
+    data.push([randf(-4.0, 4.0), randf(-4.0, 4.0)]);
+    labels.push(1);
+  }
+
+  return {'data': data, 'labels': labels};
+}

@@ -12,14 +12,15 @@ model = tf.model({inputs: input, outputs: output});\n\
 model.compile({loss: tf.losses.softmaxCrossEntropy, optimizer: 'sgd'});\n\
 ";
 
-euclidian_model = "\n\
-feature = tf.variable(tf.randomNormal(shape=[2, 8], mean=0, stdDev=0.5));\n\
-weights = tf.variable(tf.randomNormal(shape=[8, 2], mean=1.0, stdDev=0.2));\n\
-biases = tf.variable(tf.randomNormal(shape=[1, 2], mean=1.0, stdDev=0.2));\n\
+euclidian_model = "\
+feature = tf.variable(tf.randomNormal(shape=[1, 2, 16], mean=0.0, stdDev=0.2));\n\
+weights = tf.variable(tf.randomNormal(shape=[16, 2], mean=0.0, stdDev=0.2));\n\
+biases = tf.variable(tf.randomNormal(shape=[1, 2], mean=0.0, stdDev=0.2));\n\
+\n\
 predict = function(input){\n\
   return tf.tidy(function(){\n\
     net = tf.expandDims(input, 2);\n\
-    net = tf.sub(tf.expandDims(feature, 0), net);\n\
+    net = tf.sub(feature, net);\n\
     net = tf.mul(net, net);\n\
     net = tf.sqrt(tf.sum(net, 1));\n\
     net = tf.relu(net);\n\
@@ -34,5 +35,6 @@ return tf.tidy(function(){\n\
   return tf.losses.softmaxCrossEntropy(prediction, target);\n\
 });\n\
 }\n\
-optimizer = tf.train.sgd(.04);\n\
+\n\
+optimizer = tf.train.sgd(.01);\n\
 ";
