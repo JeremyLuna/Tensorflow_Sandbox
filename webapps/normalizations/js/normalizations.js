@@ -1,13 +1,11 @@
 // this is the convjs visualization tool, with a tensorflowjs backend
 // learned from https://cs.stanford.edu/people/karpathy/convnetjs/demo/classify2d.html
 
-// TODO: change to eager evaluation (can only use tf models with tf.layers, too restrictive)
-// eager mode training:
-//    https://medium.com/@tristansokol/basic-tutorial-with-tensorflow-js-linear-regression-aa68b16e5b8e
+// TODO: show tint for confidence
 
 var dataset, N;
 var density= 5.0;
-var ss = 50.0; // TODO: change scale
+var ss = 50.0; // canvas is like a 4x4 or something
 var netx;
 pixel_count = 0;
 row_pixel_count = 0;
@@ -15,7 +13,6 @@ column_pixel_count = 0;
 
 // create neural net
 var predict, loss, optimizer, train;
-var t = euclidian_model;
 
 async function reload() {
   eval(document.getElementById('layerdef').value);
@@ -146,7 +143,12 @@ function load_dataset(new_dataset){
     N = dataset['labels'].length;
 }
 
-document.getElementById('layerdef').value = t;
+function load_model(model){
+    document.getElementById('layerdef').value = model;
+    reload();
+}
+
+load_model(dense_model);
 load_dataset(circle_dataset());
 reload();
-NPGinit(1000);
+NPGinit();

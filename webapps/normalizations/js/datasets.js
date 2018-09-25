@@ -1,3 +1,7 @@
+// TODO: make angular datasets,
+// and one where y doesnt matter or 
+// ellipse, to test weighted norms
+
 function original_dataset(){
   data = [];
   labels = [];
