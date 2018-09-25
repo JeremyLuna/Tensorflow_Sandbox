@@ -34,5 +34,5 @@ return tf.tidy(function(){\n\
   return tf.losses.softmaxCrossEntropy(prediction, target);\n\
 });\n\
 }\n\
-optimizer = tf.train.sgd(.01);\n\
+optimizer = tf.train.sgd(.04);\n\
 ";

@@ -6,6 +6,7 @@
 //    https://medium.com/@tristansokol/basic-tutorial-with-tensorflow-js-linear-regression-aa68b16e5b8e
 
 var dataset, N;
+var density= 5.0;
 var ss = 50.0; // TODO: change scale
 var netx;
 pixel_count = 0;
@@ -23,6 +24,7 @@ async function reload() {
     optimizer.minimize(function() {
       predictions = predict(inputs);
       stepLoss = loss(predictions, labels);
+      document.getElementById("loss_display").innerHTML = "Loss: " + stepLoss;
       return stepLoss;
     });
   };
@@ -32,7 +34,7 @@ async function reload() {
 function myinit() {
     var im = [];
     pixel_count = 0;
-    var density= 5.0;
+
     for(var x=0.0, cx=0; x<=WIDTH; x+= density, cx++) {
       if (cx > row_pixel_count) row_pixel_count = cx;
       for(var y=0.0, cy=0; y<=HEIGHT; y+= density, cy++) {
@@ -46,16 +48,14 @@ function myinit() {
     netx = tf.tensor(im);
 }
 
-async function update(){
+async function update(){// TODO: minibatches
   while (true) { // epochs
     await draw();
-    x = tf.tidy(() => {
-      return tf.tensor(dataset['data']);
+    tf.tidy(() => {
+        x = tf.tensor(dataset['data']);
+        y = tf.oneHot(tf.tensor(dataset['labels']).asType('int32'), 2).asType('float32');
+        train(x, y);
     });
-    y = tf.tidy(() => {
-      return tf.oneHot(tf.tensor(dataset['labels']).asType('int32'), 2).asType('float32');
-    });
-    train(x, y);
   }
 }
 
@@ -65,7 +65,6 @@ async function draw(){
     // ctx.clearRect(0,0,WIDTH,HEIGHT);
 
     // draw decisions in the grid
-    var density= 5.0;
     var gridstep = 2;
     var gridx = [];
     var gridy = [];
