@@ -19,22 +19,24 @@ var t = euclidian_model;
 async function reload() {
   // eval(document.getElementById('layerdef').value);
 
-feature = tf.variable(tf.randomNormal(shape=[4, 2], mean=0.5, stdDev=0.2));
-weights = tf.variable(tf.randomNormal(shape=[2, 4], mean=1.0, stdDev=0.2));
-biases = tf.variable(tf.randomNormal(shape=[2], mean=1.0, stdDev=0.2));
+feature = tf.variable(tf.randomNormal(shape=[2, 8], mean=0.5, stdDev=0.2));
+weights = tf.variable(tf.randomNormal(shape=[8, 2], mean=1.0, stdDev=0.2));
+biases = tf.variable(tf.randomNormal(shape=[1, 2], mean=1.0, stdDev=0.2));
 predict = function(input){
   return tf.tidy(function(){
-    net = tf.sub(feature, input);
+    net = tf.expandDims(input, 2);
+    net = tf.sub(tf.expandDims(feature, 0), net);
     net = tf.mul(net, net);
     net = tf.sqrt(tf.sum(net, 1));
-    net = tf.matMul(weights, net).add(biases);
+    net = tf.matMul(net, weights).add(biases);
+    // net = tf.relu(net);
     return net;
   });
 };
 
 function loss(prediction, target){
 return tf.tidy(function(){
-  return tf.softmaxCrossEntropy(prediction, target);
+  return tf.losses.softmaxCrossEntropy(prediction, target);
 });
 }
 optimizer = tf.train.sgd(0.01);
@@ -68,8 +70,8 @@ function myinit() {
 }
 
 async function update(){
-  for(var iters=0;iters<1000;iters++) { // epochs
-    draw();
+  while (true) { // epochs
+    await draw();
     x = tf.tidy(() => {
       return tf.tensor(dataset['data']);
     });
@@ -92,7 +94,7 @@ async function draw(){
     var gridy = [];
     var gridl = [];
 
-    var a = predict(netx).data();
+    var a = await predict(netx).data();
     for(var x=0.0, cx=0; x<=WIDTH; x+= density, cx++) {
       for(var y=0.0, cy=0; y<=HEIGHT; y+= density, cy++) {
         if(a[(cx*column_pixel_count + cy)*2] > a[(cx*column_pixel_count + cy)*2 + 1]) ctx.fillStyle = 'rgb(250, 150, 150)';
@@ -119,6 +121,7 @@ async function draw(){
       else ctx.fillStyle = 'rgb(200,100,100)';
       drawCircle(dataset['data'][i][0]*ss+WIDTH/2, dataset['data'][i][1]*ss+HEIGHT/2, 5.0);
     }
+    return true;
 }
 
 function mouseClick(x, y, shiftPressed, ctrlPressed){
