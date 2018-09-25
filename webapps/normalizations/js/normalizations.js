@@ -10,7 +10,7 @@ visWIDTH = viscanvas.width;
 visHEIGHT = viscanvas.height;
 
 // create neural net
-var layer_defs, net, trainer;
+var net;
 var t = "\n\
 input = tf.input({shape: [2]});\n\
 \n\
@@ -20,10 +20,10 @@ dense2 = tf.layers.dense({units: 2, activation: 'linear'});\n\
 output = dense2.apply(dense1.apply(input));\n\
 net = tf.model({inputs: input, outputs: output});\n\
 \n\
-net.compile({loss: 'meanSquaredError', optimizer: 'sgd'});\n\
+net.compile({loss: tf.losses.softmaxCrossEntropy, optimizer: 'sgd'});\n\
 ";
 
-function reload() {
+async function reload() {
   eval(document.getElementById('layerdef').value);
   // enter buttons for layers
   // var t = '';
@@ -33,6 +33,7 @@ function reload() {
   // }
   // document.getElementById('layer_ixes').innerHTML = t;
   // document.getElementById('cyclestatus').value = 'drawing neurons ' + d0 + ' and ' + d1 + ' of layer with index ' + lix + ' (' + net.layers[lix].layer_type + ')';
+  NPGinit(1000);
 }
 function updateLix(newlix) {
   lix = newlix;
@@ -113,28 +114,18 @@ function original_data(){
 // here
 
 async function update(){
-  // forward prop the data
-
-  var start = new Date().getTime();
-
-  //var x = new convnetjs.Vol(1,1,2);
-  var avloss = 0.0;
-  for(var iters=0;iters<20;iters++) {
-    for(var ix=0;ix<N;ix++) {
-      // x.w = data[ix];
-      // var stats = trainer.train(x, labels[ix]);
-      x = tf.tensor([data[ix]]);
-      y = tf.oneHot(tf.tensor([0, labels[ix]]).asType('int32'), 2);
-      const h = await net.fit(x, y);
-      // avloss += stats.loss;
+  for(var iters=0;iters<1000;iters++) { // epochs
+    draw();
+    for(var ix=0;ix<N;ix++) {        // examples
+      x = tf.tidy(() => {
+          return tf.tensor([data[ix]]);
+      });
+      y = tf.tidy(() => {
+          return tf.oneHot(tf.tensor([labels[ix]]).asType('int32'), 2).asType('float32');
+      });
+      await net.fit(x, y);
     }
   }
-  // avloss /= N*iters;
-
-  var end = new Date().getTime();
-  var time = end - start;
-
-  //console.log('loss = ' + avloss + ', 100 cycles through data in ' + time + 'ms');
 }
 
 // function cycle() {
@@ -149,28 +140,35 @@ async function update(){
 var lix = 4; // layer id to track first 2 neurons of
 var d0 = 0; // first dimension to show visualized
 var d1 = 1; // second dimension to show visualized
-function draw(){
+async function draw(){
 
     ctx.clearRect(0,0,WIDTH,HEIGHT);
 
     // var netx = new convnetjs.Vol(1,1,2);
-    var netx = [[2, 2]]; // just placeholders
+    var netx = []; // just placeholders
     // draw decisions in the grid
     var density= 5.0;
     var gridstep = 2;
     var gridx = [];
     var gridy = [];
     var gridl = [];
+    batch_size_res = 0;
+    batch_size_x_res = 0;
+    batch_size_y_res = 0;
+    for(var x=0.0, cx=0; x<=WIDTH; x+= density, cx++) {
+      if (cx > batch_size_x_res) batch_size_x_res = cx;
+      for(var y=0.0, cy=0; y<=HEIGHT; y+= density, cy++) {
+        if (cy > batch_size_y_res) batch_size_y_res = cy;
+        batch_size_res++;
+        netx.push([]);
+        netx[batch_size_res-1].push((x-WIDTH/2)/ss);
+        netx[batch_size_res-1].push((y-HEIGHT/2)/ss);
+      }
+    }
+    var a = await net.predict(tf.tensor(netx), {batchSize: batch_size_res}).data();
     for(var x=0.0, cx=0; x<=WIDTH; x+= density, cx++) {
       for(var y=0.0, cy=0; y<=HEIGHT; y+= density, cy++) {
-        //var dec= svm.marginOne([(x-WIDTH/2)/ss, (y-HEIGHT/2)/ss]);
-        netx[0][0] = (x-WIDTH/2)/ss;
-        netx[0][1] = (y-HEIGHT/2)/ss;
-        // var a = net.forward(netx, false);
-        var a = net.predict(tf.tensor(netx), {batchSize: 1, verbose: true});
-
-
-        if(a[0] > a[1]) ctx.fillStyle = 'rgb(250, 150, 150)';
+        if(a[(cx*batch_size_y_res + cy)*2] > a[(cx*batch_size_y_res + cy)*2 + 1]) ctx.fillStyle = 'rgb(250, 150, 150)';
         else ctx.fillStyle = 'rgb(150, 250, 150)';
 
         //ctx.fillStyle = 'rgb(150,' + Math.floor(a.w[0]*105)+150 + ',150)';
@@ -181,9 +179,11 @@ function draw(){
           // record the transformation information
           // var xt = net.layers[lix].out_act.w[d0]; // in screen coords
           // var yt = net.layers[lix].out_act.w[d1]; // in screen coords
+          // var xt = a[(cx*batch_size_y_res + cy)*2]; // in screen coords
+          // var yt = a[(cx*batch_size_y_res + cy)*2 + 1]; // in screen coords
           // gridx.push(xt);
           // gridy.push(yt);
-          gridl.push(a[0] > a[1]); // remember final label as well
+          // gridl.push(a[0] > a[1]); // remember final label as well
         }
       }
     }
@@ -257,9 +257,11 @@ function draw(){
       drawCircle(data[i][0]*ss+WIDTH/2, data[i][1]*ss+HEIGHT/2, 5.0);
 
       // also draw transformed data points while we're at it
-      netx[0][0] = data[i][0];
-      netx[0][1] = data[i][1];
-      var a = net.predict(tf.tensor(netx), {batchSize: 1, verbose: true});
+      // netx[0][0] = data[i][0];
+      // netx[0][1] = data[i][1];
+      // console.log("predicting2");
+      // var a = net.predict(tf.tensor(netx), {batchSize: 1});
+      // console.log("predicting2 done");
       // var xt = visWIDTH * (net.layers[lix].out_act.w[d0] - mmx.minv) / mmx.dv; // in screen coords
       // var yt = visHEIGHT * (net.layers[lix].out_act.w[d1] - mmy.minv) / mmy.dv; // in screen coords
       if(labels[i]==1) visctx.fillStyle = 'rgb(100,200,100)';
@@ -317,4 +319,3 @@ document.getElementById('layerdef').value = t;
 // circle_data();
 original_data();
 reload();
-NPGinit(20);

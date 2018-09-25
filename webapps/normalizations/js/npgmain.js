@@ -13,7 +13,6 @@ var canvas;
 var ctx;
 var WIDTH;
 var HEIGHT;
-var FPS;
 
 function drawBubble(x, y, w, h, radius)
 {
@@ -108,7 +107,7 @@ function eventKeyDown(e) {
   keyDown(keycode);
 }
 
-function NPGinit(FPS){
+function NPGinit(time_m){
   //takes frames per secont to run at
 
   canvas = document.getElementById('NPGcanvas');
@@ -123,14 +122,12 @@ function NPGinit(FPS){
   document.addEventListener('keyup', eventKeyUp, true);
   document.addEventListener('keydown', eventKeyDown, true);
 
-  // setInterval(NPGtick, 1000/FPS);
-  setInterval(NPGtick, 5000);
-
+  // setInterval(NPGtick, time_m);
+  NPGtick();
 
   myinit();
 }
 
 function NPGtick() {
     update();
-    draw();
 }
