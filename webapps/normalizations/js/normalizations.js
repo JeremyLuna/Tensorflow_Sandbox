@@ -102,7 +102,7 @@ function mouseClick(x, y, shiftPressed, ctrlPressed){
   // x and y transformed to data space coordinates
   // var xt = (x-WIDTH/2)/ss;
   // var yt = (y-HEIGHT/2)/ss;
-  var xt = (x-WIDTH/2)/ss;
+  var xt = (x-WIDTH)/ss;
   var yt = (y-HEIGHT)/ss;
 
   if(ctrlPressed) {
