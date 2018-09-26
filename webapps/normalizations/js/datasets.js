@@ -1,8 +1,8 @@
 // TODO: make angular datasets,
-// and one where y doesnt matter or 
+// and one where y doesnt matter or
 // ellipse, to test weighted norms
 
-function original_dataset(){
+function simple_dataset(){
   data = [];
   labels = [];
   data.push([-0.4326,  1.1909]); labels.push(1);
@@ -21,7 +21,43 @@ function original_dataset(){
   return {'data': data, 'labels': labels};
 }
 
+function cluster_dataset(){
+  data = [];
+  labels = [];
+
+  x_coord = randf(-4.0, 4.0);
+  y_coord = randf(-4.0, 4.0);
+  for (x = 0; x < 10; x++){
+    data.push([randn(x_coord, 0.3), randn(y_coord, 0.3)]);
+    labels.push(0);
+  }
+
+  for (x = 0; x < 15; x++){
+    data.push([randf(-4.0, 4.0), randf(-4.0, 4.0)]);
+    labels.push(1);
+  }
+
+  return {'data': data, 'labels': labels};
+}
+
 function circle_dataset(){
+  data = [];
+  labels = [];
+
+  for (x = 0.0; x <= 2*Math.PI; x += .1*Math.PI){
+    data.push([.5*Math.cos(x)+1.0, .5*Math.sin(x)+1.0]);
+    labels.push(0);
+  }
+
+  for (x = 0; x < 10; x++){
+    data.push([randf(-4.0, 4.0), randf(-4.0, 4.0)]);
+    labels.push(1);
+  }
+
+  return {'data': data, 'labels': labels};
+}
+
+function telephone_pole_dataset(){
   data = [];
   labels = [];
 

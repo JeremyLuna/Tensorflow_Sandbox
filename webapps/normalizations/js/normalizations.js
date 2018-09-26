@@ -72,8 +72,16 @@ async function draw(){
     var a = await predict(netx).data();
     for(var x=0.0, cx=0; x<=WIDTH; x+= density, cx++) {
       for(var y=0.0, cy=0; y<=HEIGHT; y+= density, cy++) {
-        if(a[(cx*(column_pixel_count + 1)+ cy)*2] > a[(cx*(column_pixel_count + 1) + cy)*2 + 1]) ctx.fillStyle = 'rgb(250, 150, 150)';
-        else ctx.fillStyle = 'rgb(150, 250, 150)';
+        // classification display
+        if(a[(cx*(column_pixel_count + 1)+ cy)*2] > a[(cx*(column_pixel_count + 1) + cy)*2 + 1]){
+          ctx.fillStyle = 'rgb(200, 100, 100)';
+        }else{
+          ctx.fillStyle = 'rgb(100, 100, 200)';
+        }
+        // smooth display
+        // confidence_ratio = a[(cx*(column_pixel_count + 1)+ cy)*2] / (a[(cx*(column_pixel_count + 1)+ cy)*2] + a[(cx*(column_pixel_count + 1) + cy)*2 + 1]);
+        // ctx.fillStyle = 'rgb(' + confidence_ratio*250 +',0,'+ (1-confidence_ratio)*250 +')';
+
         ctx.fillRect(x-density/2-1, y-density/2-1, density+2, density+2);
       }
     }
@@ -92,8 +100,8 @@ async function draw(){
     ctx.strokeStyle = 'rgb(0,0,0)';
     ctx.lineWidth = 1;
     for(var i=0;i<N;i++) {
-      if(labels[i]==1) ctx.fillStyle = 'rgb(100,200,100)';
-      else ctx.fillStyle = 'rgb(200,100,100)';
+      if(labels[i]==1) ctx.fillStyle = 'rgb(0,0,255)';
+      else ctx.fillStyle = 'rgb(255,0,0)';
       drawCircle(dataset['data'][i][0]*ss+WIDTH/2, dataset['data'][i][1]*ss+HEIGHT/2, 5.0);
     }
     return true;
@@ -151,6 +159,6 @@ function load_model(model){
 }
 
 load_model(dense_model);
-load_dataset(circle_dataset());
+load_dataset(simple_dataset());
 reload();
 NPGinit();

@@ -9,16 +9,18 @@
 <br>
 
 <input id="buttontp" type="submit" value="change network" onclick="reload();" style="width: 300px; height: 50px;"/><br>
-<input id="dense_button" type="submit" value="dense model" onclick="load_model(dense_model);" style="width: 100px; height: 33px;"/>
-<input id="euclidian_button" type="submit" value="euclidian model" onclick="load_model(euclidian_model);" style="width: 100px; height: 33px;"/><br>
+<input id="dense_button" type="submit" value="dense" onclick="load_model(dense_model);" style="width: 100px; height: 33px;"/>
+<input id="euclidian_button" type="submit" value="euclidian" onclick="load_model(euclidian_model);" style="width: 100px; height: 33px;"/><br>
 
 <h2 id="loss_display"></h2>
 
 <canvas id="NPGcanvas" width="400" height="400">Browser not supported for Canvas. Get a real browser.</canvas><br>
-<input id="buttondata1" type="submit" value="simple data" onclick="load_dataset(original_dataset());" style="width: 100px; height: 30px;"/>
-<input id="buttondata2" type="submit" value="circle data" onclick="load_dataset(circle_dataset());" style="width: 100px; height: 30px;"/>
-<input id="buttondata3" type="submit" value="spiral data" onclick="load_dataset(spiral_dataset());" style="width: 100px; height: 30px;"/>
-<input id="buttondata4" type="submit" value="random data" onclick="load_dataset(random_dataset());" style="width: 100px; height: 30px;"/><br>
+<input id="buttondata0" type="submit" value="Simple" onclick="load_dataset(simple_dataset());" style="width: 100px; height: 30px;"/>
+<input id="buttondata1" type="submit" value="Cluster" onclick="load_dataset(cluster_dataset());" style="width: 100px; height: 30px;"/>
+<input id="buttondata2" type="submit" value="Circle" onclick="load_dataset(circle_dataset());" style="width: 100px; height: 30px;"/>
+<input id="buttondata3" type="submit" value="Telephone Pole" onclick="load_dataset(telephone_pole_dataset());" style="width: 100px; height: 30px;"/>
+<input id="buttondata4" type="submit" value="Spiral" onclick="load_dataset(spiral_dataset());" style="width: 100px; height: 30px;"/>
+<input id="buttondata5" type="submit" value="Random" onclick="load_dataset(random_dataset());" style="width: 100px; height: 30px;"/><br>
 <p>
     Controls:<br>
     <b>CLICK</b>: Add red data point<br>
