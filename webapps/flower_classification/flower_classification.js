@@ -22,7 +22,7 @@ let interval_id;
 
 async function setup(){
     try {
-        model = await tf.loadModel("https://jeremyluna.github.io/Tensorflow_Sandbox/webapps/mnist/saved_model/js_saved_model.json",
+        model = await tf.loadModel("https://jeremyluna.github.io/Tensorflow_Sandbox/webapps/flower_classification/saved_model/js_saved_model.json",
                                strict = false);
     } catch (err) {
         console.log("Error: ", err);

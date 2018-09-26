@@ -2,6 +2,8 @@
 # converted previously using the command:
 # tensorflowjs_converter --input_format=tf_saved_model --output_node_names="net_out/BiasAdd" py_model_saves js_model_saves
 
+# TODO:  make flower dataset handler and modify this for flower dataset
+
 import tensorflow as tf
 from tensorflow.examples.tutorials.mnist import input_data
 
