@@ -2,6 +2,8 @@
 // learned from https://cs.stanford.edu/people/karpathy/convnetjs/demo/classify2d.html
 
 // TODO: show tint for confidence
+// TODO: fix mouse position
+//   https://www.html5canvastutorials.com/advanced/html5-canvas-mouse-coordinates/
 
 var dataset, N;
 var density= 5.0;
@@ -100,10 +102,8 @@ async function draw(){
 function mouseClick(x, y, shiftPressed, ctrlPressed){
 
   // x and y transformed to data space coordinates
-  // var xt = (x-WIDTH/2)/ss;
-  // var yt = (y-HEIGHT/2)/ss;
-  var xt = (x-(WIDTH/2))/ss;
-  var yt = (y-HEIGHT)/ss;
+  var xt = (x-WIDTH/2)/ss;
+  var yt = (y-HEIGHT/2)/ss;
 
   if(ctrlPressed) {
     // remove closest data point
