@@ -12,6 +12,7 @@ var netx;
 pixel_count = 0;
 row_pixel_count = 0;
 column_pixel_count = 0;
+classify = true;
 
 // create neural net
 var predict, loss, optimizer, train;
@@ -72,15 +73,16 @@ async function draw(){
     var a = await predict(netx).data();
     for(var x=0.0, cx=0; x<=WIDTH; x+= density, cx++) {
       for(var y=0.0, cy=0; y<=HEIGHT; y+= density, cy++) {
-        // classification display
-        if(a[(cx*(column_pixel_count + 1)+ cy)*2] > a[(cx*(column_pixel_count + 1) + cy)*2 + 1]){
-          ctx.fillStyle = 'rgb(200, 100, 100)';
+        if (classify){
+          if(a[(cx*(column_pixel_count + 1)+ cy)*2] > a[(cx*(column_pixel_count + 1) + cy)*2 + 1]){
+            ctx.fillStyle = 'rgb(200, 100, 100)';
+          }else{
+            ctx.fillStyle = 'rgb(100, 100, 200)';
+          }
         }else{
-          ctx.fillStyle = 'rgb(100, 100, 200)';
+          confidence_ratio = a[(cx*(column_pixel_count + 1)+ cy)*2] / (a[(cx*(column_pixel_count + 1)+ cy)*2] + a[(cx*(column_pixel_count + 1) + cy)*2 + 1]);
+          ctx.fillStyle = 'rgb(' + confidence_ratio*250 +',0,'+ (1-confidence_ratio)*250 +')';
         }
-        // smooth display
-        // confidence_ratio = a[(cx*(column_pixel_count + 1)+ cy)*2] / (a[(cx*(column_pixel_count + 1)+ cy)*2] + a[(cx*(column_pixel_count + 1) + cy)*2 + 1]);
-        // ctx.fillStyle = 'rgb(' + confidence_ratio*250 +',0,'+ (1-confidence_ratio)*250 +')';
 
         ctx.fillRect(x-density/2-1, y-density/2-1, density+2, density+2);
       }
