@@ -60,11 +60,14 @@ class Flower_Dataset:
         else:
             indexes_to_use = list(range(self.train_data_index, self.train_data_count)) + list(range(diff))
         for example in indexes_to_use:
-            if (self.train_data_paths[example] != 'mosaic/23mosaicvirus4.jpg'):
-                im = misc.imread(self.data_dir + '/' + self.train_data_paths[example], mode='RGB')
-                im = resize(im/255, size) #getdata, putdata
-                data['examples'].append(im)
-                data['labels'].append(self.classes.index(self.train_data_paths[example].split('/')[0]))
+            try:
+                if (self.train_data_paths[example] != 'mosaic/23mosaicvirus4.jpg'):
+                    im = misc.imread(self.data_dir + '/' + self.train_data_paths[example], mode='RGB')
+                    im = resize(im/255, size) #getdata, putdata
+                    data['examples'].append(im)
+                    data['labels'].append(self.classes.index(self.train_data_paths[example].split('/')[0]))
+            except:
+                print("unreadable example: " + self.train_data_paths[example])
             self.train_data_index = example
         return data
 
@@ -76,10 +79,13 @@ class Flower_Dataset:
         else:
             indexes_to_use = list(range(self.test_data_index, self.test_data_count)) + list(range(diff))
         for example in indexes_to_use:
-            if (self.test_data_paths[example] != 'mosaic/23mosaicvirus4.jpg'):
-                im = misc.imread(self.data_dir + '/' + self.test_data_paths[example], mode='RGB')
-                im = resize(im/255, size)
-                data['examples'].append(im)
-                data['labels'].append(self.classes.index(self.test_data_paths[example].split('/')[0]))
+            try:
+                if (self.test_data_paths[example] != 'mosaic/23mosaicvirus4.jpg'):
+                    im = misc.imread(self.data_dir + '/' + self.test_data_paths[example], mode='RGB')
+                    im = resize(im/255, size)
+                    data['examples'].append(im)
+                    data['labels'].append(self.classes.index(self.test_data_paths[example].split('/')[0]))
+            except Exception as e:
+                print("unreadable example: " + self.test_data_paths[example])
             self.test_data_index = example
         return data
