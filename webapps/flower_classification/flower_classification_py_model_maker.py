@@ -11,7 +11,7 @@ from scipy import misc
 batch_size = 10
 epochs = 1
 log_level = 2
-dataset = Flower_Dataset("G:/programming/bina/plant_disease/rose")
+dataset = Flower_Dataset("F:/programming/bina/plant_disease/rose")
 
 x = tf.placeholder('float', [None, 100, 100, 3])
 y = tf.placeholder('int64', [None])

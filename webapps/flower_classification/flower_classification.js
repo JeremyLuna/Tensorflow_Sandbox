@@ -15,22 +15,20 @@
 
 // stream from camera
 const video = document.getElementById("webcam");
-// navigator.mediaDevices.getUserMedia({video: true).then((stream) => {video.srcObject = stream});
-// navigator.mediaDevices.getUserMedia({video: { width: 28, height: 28 }}).then((stream) => {video.srcObject = stream});
-
 
 model = "temp";
 let interval_id;
+var classes = ['anthracnose', 'aphids', 'black _spot', 'botrytis_blight', 'cercospora', 'crown_gall', 'downy_mildew', 'healthy', 'leaf_cutting_bee', 'mosaic', 'powdery_mildew', 'rose_chafer', 'rose_rosette', 'rust', 'stem_cankers', 'thrips', 'two-spotted_mite'];
 
 async function setup(){
-    // try {
+    try {
         storage_dir = "https://jeremyluna.github.io/Tensorflow_Sandbox/webapps/flower_classification/js_model_saves/";
         model_dir = "tensorflowjs_model.pb";
         weights_dir = "weights_manifest.json";
         model = await tf.loadFrozenModel(storage_dir+model_dir, storage_dir+weights_dir);
-    // } catch (err) {
-    //     console.log("Error: ", err);
-    // }
+    } catch (err) {
+        console.log("Error: ", err);
+    }
 }
 
 function calc_disease(){
@@ -40,7 +38,8 @@ function calc_disease(){
     preprocessor = tf.expandDims(preprocessor, 0);
     output = model.predict(preprocessor);
     output = tf.argMax(output, 1);
-    document.getElementById("digit").innerHTML = "Disease: " + output.get([0]);
+    output = classes[output.get([0])];
+    document.getElementById("disease").innerHTML = "Disease: " + output;
 }
 
 setup();
