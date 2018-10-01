@@ -23,25 +23,26 @@ model = "temp";
 let interval_id;
 
 async function setup(){
-    try {
-        model = await tf.loadModel("https://jeremyluna.github.io/Tensorflow_Sandbox/webapps/flower_classification/js_model_saves/js_saved_model.json",
-                               strict = false);
-    } catch (err) {
-        console.log("Error: ", err);
-    }
+    // try {
+        storage_dir = "https://jeremyluna.github.io/Tensorflow_Sandbox/webapps/flower_classification/js_model_saves/";
+        model_dir = "tensorflowjs_model.pb";
+        weights_dir = "weights_manifest.json";
+        model = await tf.loadFrozenModel(storage_dir+model_dir, storage_dir+weights_dir);
+    // } catch (err) {
+    //     console.log("Error: ", err);
+    // }
 }
 
-function calc_digit(){
+function calc_disease(){
     // Reads the image as a Tensor from the webcam <video> element.
-    preprocessor = tf.fromPixels(video);
+    preprocessor = tf.fromPixels(video).asType('float32');
+    preprocessor = tf.div(preprocessor, 255);
     preprocessor = tf.expandDims(preprocessor, 0);
-    preprocessor = tf.expandDims(preprocessor, 3);
     output = model.predict(preprocessor);
     output = tf.argMax(output, 1);
-    document.getElementById("digit").innerHTML = "Digit: " + output.get([0]);
-    // document.getElementById("digit").innerHTML = output;
+    document.getElementById("digit").innerHTML = "Disease: " + output.get([0]);
 }
 
 setup();
 
-interval_id = setInterval(calc_digit, 1000);
+interval_id = setInterval(calc_disease, 1000);
