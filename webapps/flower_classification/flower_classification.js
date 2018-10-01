@@ -24,7 +24,7 @@ let interval_id;
 
 async function setup(){
     try {
-        model = await tf.loadModel("https://jeremyluna.github.io/Tensorflow_Sandbox/webapps/flower_classification/saved_model/js_saved_model.json",
+        model = await tf.loadModel("https://jeremyluna.github.io/Tensorflow_Sandbox/webapps/flower_classification/js_model_saves/js_saved_model.json",
                                strict = false);
     } catch (err) {
         console.log("Error: ", err);
@@ -34,7 +34,6 @@ async function setup(){
 function calc_digit(){
     // Reads the image as a Tensor from the webcam <video> element.
     preprocessor = tf.fromPixels(video);
-    preprocessor = tf.mean(preprocessor, 2);
     preprocessor = tf.expandDims(preprocessor, 0);
     preprocessor = tf.expandDims(preprocessor, 3);
     output = model.predict(preprocessor);
