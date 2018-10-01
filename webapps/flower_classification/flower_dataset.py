@@ -40,13 +40,15 @@ class Flower_Dataset:
         for a_class in self.classes:
             example_paths = listdir(self.data_dir + '/' + a_class + '/')
             example_count = len(example_paths)
-            self.train_data_count = int(train_ratio * example_count)
-            self.test_data_count = example_count - self.train_data_count
-            for file_name_index in range(int(self.train_data_count)):
+            train_example_count = int(train_ratio * example_count)
+            test_example_count = example_count - train_example_count
+            for file_name_index in range(int(train_example_count)):
                 self.train_data_paths.append(a_class + "/" + example_paths[file_name_index])
-            for file_name_index in range(self.train_data_count, example_count):
+            for file_name_index in range(train_example_count, example_count):
                 self.test_data_paths.append(a_class + "/" + example_paths[file_name_index])
         # shuffle
+        self.train_data_count = len(self.train_data_paths)
+        self.test_data_count = len(self.test_data_paths)
         shuffle(self.train_data_paths)
         shuffle(self.test_data_paths)
 
@@ -58,10 +60,12 @@ class Flower_Dataset:
         else:
             indexes_to_use = list(range(self.train_data_index, self.train_data_count)) + list(range(diff))
         for example in indexes_to_use:
-            im = misc.imread(self.data_dir + '/' + self.train_data_paths[example])
-            im = resize(im/255, size)
-            data['examples'].append(im)
-            data['labels'].append(self.classes.index(self.train_data_paths[example].split('/')[0]))
+            if (self.train_data_paths[example] != 'mosaic/23mosaicvirus4.jpg'):
+                im = misc.imread(self.data_dir + '/' + self.train_data_paths[example], mode='RGB')
+                im = resize(im/255, size) #getdata, putdata
+                data['examples'].append(im)
+                data['labels'].append(self.classes.index(self.train_data_paths[example].split('/')[0]))
+            self.train_data_index = example
         return data
 
     def get_next_test_batch(self, examples):
@@ -72,8 +76,10 @@ class Flower_Dataset:
         else:
             indexes_to_use = list(range(self.test_data_index, self.test_data_count)) + list(range(diff))
         for example in indexes_to_use:
-            im = misc.imread(self.data_dir + '/' + self.test_data_paths[example])
-            im = resize(im/255, size)
-            data['examples'].append(im)
-            data['labels'].append(self.classes.index(self.test_data_paths[example].split('/')[0]))
+            if (self.test_data_paths[example] != 'mosaic/23mosaicvirus4.jpg'):
+                im = misc.imread(self.data_dir + '/' + self.test_data_paths[example], mode='RGB')
+                im = resize(im/255, size)
+                data['examples'].append(im)
+                data['labels'].append(self.classes.index(self.test_data_paths[example].split('/')[0]))
+            self.test_data_index = example
         return data

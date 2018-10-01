@@ -2,14 +2,14 @@
 # converted previously using the command:
 # tensorflowjs_converter --input_format=tf_saved_model --output_node_names="net_out/BiasAdd" py_model_saves js_model_saves
 
-# TODO:  make flower dataset handler and modify this for flower dataset
+# 38.64% accuracy
 
 import tensorflow as tf
 from flower_dataset import Flower_Dataset
 from scipy import misc
 
-batch_size = 10
-epochs = 1
+batch_size = 100
+epochs = 20
 log_level = 2
 dataset = Flower_Dataset("F:/programming/bina/plant_disease/rose")
 
