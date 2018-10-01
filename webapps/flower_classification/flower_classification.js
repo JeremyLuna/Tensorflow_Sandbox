@@ -10,6 +10,8 @@
 //      http://html5doctor.com/video-canvas-magic/
 // TODO: drawing on canvas
 //      https://www.w3schools.com/Html/html5_canvas.asp
+// Other dataset "plant village":
+//      https://github.com/spMohanty/PlantVillage-Dataset
 
 // stream from camera
 const video = document.getElementById("webcam");
