@@ -82,14 +82,9 @@ async function draw(){
             ctx.fillStyle = 'rgb(100, 100, 200)';
           }
         }else{
-          confidence_ratio = Math.abs(blue) / Math.abs(blue + red);
-          if (blue>red){
-            ctx.fillStyle = 'rgb(' + confidence_ratio*255 +',0,'+ (1-confidence_ratio)*255 +')';
-          }else{
-            ctx.fillStyle = 'rgb(' + (1-confidence_ratio)*255 +',0,'+ confidence_ratio*255 +')';
-          }
+          confidence_ratio = tf.softmax([blue, red]);
+          ctx.fillStyle = 'rgb(' + confidence_ratio[0]*255 +',0,'+ confidence_ratio[1]*255 +')';
         }
-
         ctx.fillRect(x-density/2-1, y-density/2-1, density+2, density+2);
       }
     }
