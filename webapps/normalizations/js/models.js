@@ -29,17 +29,41 @@ return tf.tidy(function(){\n\
 optimizer = tf.train.sgd(.01);\n\
 ";
 
+// these two seem to discriminate by angle
+manhattan_model = "\
+feature = tf.variable(tf.randomUniform(shape=[1, 2, 8], minval=-2, maxval=2));\n\
+weights = tf.variable(tf.randomUniform(shape=[8, 2], minval=-2, maxval=2));\n\
+biases = tf.variable(tf.randomUniform(shape=[1, 2], minval=-2, maxval=2));\n\
+\n\
+predict = function(input){\n\
+  return tf.tidy(function(){\n\
+    net = tf.expandDims(input, 2);\n\
+    net = tf.sub(feature, net);\n\
+    net = tf.norm(net, ord=1, axis=1, keepDims=false);\n\
+    net = tf.matMul(net, weights).add(biases);\n\
+    return net;\n\
+  });\n\
+};\n\
+\n\
+function loss(prediction, target){\n\
+return tf.tidy(function(){\n\
+  return tf.losses.softmaxCrossEntropy(prediction, target);\n\
+});\n\
+}\n\
+\n\
+optimizer = tf.train.sgd(.01);\n\
+";
+
 euclidian_model = "\
-feature = tf.variable(tf.randomNormal(shape=[1, 2, 8], mean=0.0, stdDev=0.2));\n\
-weights = tf.variable(tf.randomNormal(shape=[8, 2], mean=0.0, stdDev=0.2));\n\
-biases = tf.variable(tf.randomNormal(shape=[1, 2], mean=0.5, stdDev=0.2));\n\
+feature = tf.variable(tf.randomUniform(shape=[1, 2, 8], minval=-2, maxval=2));\n\
+weights = tf.variable(tf.randomUniform(shape=[8, 2], minval=0, maxval=1));\n\
 \n\
 predict = function(input){\n\
   return tf.tidy(function(){\n\
     net = tf.expandDims(input, 2);\n\
     net = tf.sub(feature, net);\n\
     net = tf.norm(net, ord=2, axis=1, keepDims=false);\n\
-    net = tf.matMul(net, weights).add(biases);\n\
+    net = tf.matMul(net, weights);\n\
     return net;\n\
   });\n\
 };\n\
