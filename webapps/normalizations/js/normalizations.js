@@ -152,7 +152,6 @@ function mouseClick(x, y, shiftPressed, ctrlPressed){
       }
     }
     if(mink>=0) {
-      console.log('splicing ' + mink);
       dataset['data'].splice(mink, 1);
       dataset['labels'].splice(mink, 1);
       N -= 1;

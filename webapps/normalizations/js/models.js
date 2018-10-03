@@ -26,7 +26,7 @@ return tf.tidy(function(){\n\
 });\n\
 }\n\
 \n\
-optimizer = tf.train.sgd(.01);\n\
+optimizer = tf.train.adam(.01);\n\
 ";
 
 // these two seem to discriminate by angle
@@ -39,7 +39,7 @@ predict = function(input){\n\
   return tf.tidy(function(){\n\
     net = tf.expandDims(input, 2);\n\
     net = tf.sub(feature, net);\n\
-    net = tf.norm(net, ord=1, axis=1, keepDims=false);\n\
+    net = tf.tanh(tf.norm(net, ord=1, axis=1, keepDims=false));\n\
     net = tf.matMul(net, weights).add(biases);\n\
     return net;\n\
   });\n\
@@ -51,19 +51,20 @@ return tf.tidy(function(){\n\
 });\n\
 }\n\
 \n\
-optimizer = tf.train.sgd(.01);\n\
+optimizer = tf.train.adam(.01);\n\
 ";
 
 euclidian_model = "\
 feature = tf.variable(tf.randomUniform(shape=[1, 2, 8], minval=-2, maxval=2));\n\
 weights = tf.variable(tf.randomUniform(shape=[8, 2], minval=0, maxval=1));\n\
+biases = tf.variable(tf.randomUniform(shape=[1, 2], minval=-2, maxval=2));\n\
 \n\
 predict = function(input){\n\
   return tf.tidy(function(){\n\
     net = tf.expandDims(input, 2);\n\
     net = tf.sub(feature, net);\n\
-    net = tf.norm(net, ord=2, axis=1, keepDims=false);\n\
-    net = tf.matMul(net, weights);\n\
+    net = tf.tanh(tf.norm(net, ord=2, axis=1, keepDims=false));\n\
+    net = tf.matMul(net, weights).add(biases);\n\
     return net;\n\
   });\n\
 };\n\
@@ -74,7 +75,7 @@ return tf.tidy(function(){\n\
 });\n\
 }\n\
 \n\
-optimizer = tf.train.sgd(.01);\n\
+optimizer = tf.train.adam(.01);\n\
 ";
 
 angle_model = "\
@@ -99,5 +100,5 @@ return tf.tidy(function(){\n\
 });\n\
 }\n\
 \n\
-optimizer = tf.train.sgd(.01);\n\
+optimizer = tf.train.adam(.01);\n\
 ";
