@@ -12,7 +12,7 @@ var netx;
 pixel_count = 0;
 row_pixel_count = 0;
 column_pixel_count = 0;
-classify = true;
+plot_value = 'class'; // 'class'|'softmax'|'confidence'
 
 // create neural net
 var predict, loss, optimizer, train;
@@ -54,6 +54,7 @@ async function update(){// TODO: minibatches
     tf.tidy(() => {
         x = tf.tensor(dataset['data']);
         y = tf.oneHot(tf.tensor(dataset['labels']).asType('int32'), 2).asType('float32');
+        // y = dataset['labels']
         train(x, y);
     });
   }
@@ -70,24 +71,45 @@ async function draw(){
     var gridy = [];
     var gridl = [];
 
-    var a = await predict(netx).data();
-    for(var x=0.0, cx=0; x<=WIDTH; x+= density, cx++) {
-      for(var y=0.0, cy=0; y<=HEIGHT; y+= density, cy++) {
-        blue = a[(cx*(column_pixel_count + 1)+ cy)*2];
-        red = a[(cx*(column_pixel_count + 1) + cy)*2 + 1];
-        if (classify){
+    var a = await tf.softmax(predict(netx)).data();
+    if (plot_value == 'class'){
+      for(var x=0.0, cx=0; x<=WIDTH; x+= density, cx++) {
+        for(var y=0.0, cy=0; y<=HEIGHT; y+= density, cy++) {
+          blue = a[(cx*(column_pixel_count + 1)+ cy)*2];
+          red = a[(cx*(column_pixel_count + 1) + cy)*2 + 1];
           if(blue > red){
             ctx.fillStyle = 'rgb(200, 100, 100)';
           }else{
             ctx.fillStyle = 'rgb(100, 100, 200)';
           }
-        }else{
-          confidence_ratio = tf.softmax([blue, red]);
-          ctx.fillStyle = 'rgb(' + confidence_ratio[0]*255 +',0,'+ confidence_ratio[1]*255 +')';
+          ctx.fillRect(x-density/2-1, y-density/2-1, density+2, density+2);
         }
-        ctx.fillRect(x-density/2-1, y-density/2-1, density+2, density+2);
+      }
+    }else if(plot_value == 'softmax'){
+      for(var x=0.0, cx=0; x<=WIDTH; x+= density, cx++) {
+        for(var y=0.0, cy=0; y<=HEIGHT; y+= density, cy++) {
+          blue = a[(cx*(column_pixel_count + 1)+ cy)*2];
+          red = a[(cx*(column_pixel_count + 1) + cy)*2 + 1];
+          ctx.fillStyle = 'rgb(' + blue*255 +',0,'+ red*255 +')';
+          ctx.fillRect(x-density/2-1, y-density/2-1, density+2, density+2);
+        }
+      }
+    }else if(plot_value == 'confidence'){
+      for(var x=0.0, cx=0; x<=WIDTH; x+= density, cx++) {
+        for(var y=0.0, cy=0; y<=HEIGHT; y+= density, cy++) {
+          blue = a[(cx*(column_pixel_count + 1)+ cy)*2];
+          red = a[(cx*(column_pixel_count + 1) + cy)*2 + 1];
+          confidence = Math.abs(blue-red);
+          if(blue > red){
+            ctx.fillStyle = 'rgb(' + confidence*255 +',0,'+ 0 +')';
+          }else{
+            ctx.fillStyle = 'rgb(' + 0 +',0,'+ confidence*255 +')';
+          }
+          ctx.fillRect(x-density/2-1, y-density/2-1, density+2, density+2);
+        }
       }
     }
+
 
     // draw axes
     ctx.beginPath();
