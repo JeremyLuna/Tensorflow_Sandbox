@@ -114,3 +114,28 @@ function random_dataset(){
 
   return {'data': data, 'labels': labels};
 }
+
+function angular_dataset(){
+  data = [];
+  labels = [];
+
+  function get_angle(x, y){
+    var angle = Math.atan2(y, x);
+    var degrees = 180*angle/Math.PI;
+    return (360+Math.round(degrees))%360;
+  }
+
+
+  for (dot = 0; dot < 20; dot++){
+    x = randf(-1.0, 1.0)
+    y = randf(-1.0, 1.0)
+    data.push([x, y]);
+    if (get_angle(x, y) > 45 && get_angle(x, y) < 135){
+      labels.push(0);
+    }else{
+      labels.push(1);
+    }
+  }
+
+  return {'data': data, 'labels': labels};
+}
