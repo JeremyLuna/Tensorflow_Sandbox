@@ -74,17 +74,20 @@ return tf.tidy(function(){\n\
 optimizer = tf.train.adam(.01);\n\
 ";
 
-angle_model = "\
-feature = tf.variable(tf.randomNormal(shape=[1, 2, 8], mean=0.0, stdDev=0.2));\n\
+angular_model = "\
+feature = tf.variable(tf.randomNormal(shape=[2, 8], mean=0.0, stdDev=0.2));\n\
 weights = tf.variable(tf.randomNormal(shape=[8, 2], mean=0.0, stdDev=0.2));\n\
 biases = tf.variable(tf.randomNormal(shape=[1, 2], mean=0.5, stdDev=0.2));\n\
 \n\
 predict = function(input){\n\
   return tf.tidy(function(){\n\
-    input = tf.expandDims(input, 2);\n\
-    net = tf.matMul(input, weights);\n\
-    net = net / tf.norm(weights, ord=2, axis=1, keepDims=false);\n\
-    net = net / tf.norm(input, ord=2, axis=1, keepDims=false);\n\
+    // angle between input vector and 8 other vectors\n\
+    net = tf.matMul(input, feature);\n\
+    net = tf.div(net, tf.norm(feature, ord=2, axis=0, keepDims=false));\n\
+    net = tf.div(net, tf.norm(input, ord=2, axis=1, keepDims=false).expandDims(1));\n\
+    net = tf.tanh(net);\n\
+    // weighted sum of angles\n\
+    net = tf.matMul(net, weights).add(biases);\n\
     return net;\n\
   });\n\
 };\n\

@@ -2,32 +2,36 @@
 
 <div id="wrap">
 
-<p>The network definition:</p>
+<h2>The Network</h2>
 
 <textarea id="layerdef" style="width:100%; height:200px;">
 </textarea>
 <br>
 
-<input id="buttontp" type="submit" value="change network" onclick="reload();" style="width: 300px; height: 50px;"/><br>
-<input id="dense_button" type="submit" value="dense" onclick="load_model(dense_model);" style="width: 150px; height: 33px;"/>
-<input id="manhattan_button" type="submit" value="manhattan" onclick="load_model(manhattan_model);" style="width: 150px; height: 33px;"/>
-<input id="euclidian_button" type="submit" value="euclidian" onclick="load_model(euclidian_model);" style="width: 150px; height: 33px;"/>
+<input id="buttontp" type="submit" value="load network" onclick="reload();" style="width: 400px; height: 50px;"/>
+<br>
+<input id="dense_button" type="submit" value="dense" onclick="load_model(dense_model);" style="width: 200px; height: 33px;"/>
+<input id="manhattan_button" type="submit" value="manhattan" onclick="load_model(manhattan_model);" style="width: 200px; height: 33px;"/>
+<br>
+<input id="euclidian_button" type="submit" value="euclidian" onclick="load_model(euclidian_model);" style="width: 200px; height: 33px;"/>
+<input id="angular_button" type="submit" value="angular" onclick="load_model(angular_model);" style="width: 200px; height: 33px;"/>
 <br>
 <h2 id="loss_display"></h2>
-<br>
 <input id="class_button" type="submit" value="Class" onclick="plot_value = 'class';" style="width: 100px; height: 30px;"/>
 <input id="softmax_button" type="submit" value="Softmax" onclick="plot_value = 'softmax';" style="width: 100px; height: 30px;"/>
 <input id="confidence_button" type="submit" value="Confidence" onclick="plot_value = 'confidence';" style="width: 100px; height: 30px;"/>
 <br>
 <canvas id="NPGcanvas" width="400" height="400">Browser not supported for Canvas. Get a real browser.</canvas>
 <br>
+<h2>Dataset</h2>
 <input id="buttondata0" type="submit" value="Simple" onclick="load_dataset(simple_dataset());" style="width: 100px; height: 30px;"/>
 <input id="buttondata1" type="submit" value="Cluster" onclick="load_dataset(cluster_dataset());" style="width: 100px; height: 30px;"/>
 <input id="buttondata2" type="submit" value="Circle" onclick="load_dataset(circle_dataset());" style="width: 100px; height: 30px;"/>
 <input id="buttondata3" type="submit" value="Telephone Pole" onclick="load_dataset(telephone_pole_dataset());" style="width: 100px; height: 30px;"/>
+<br>
 <input id="buttondata4" type="submit" value="Spiral" onclick="load_dataset(spiral_dataset());" style="width: 100px; height: 30px;"/>
 <input id="buttondata5" type="submit" value="Angular" onclick="load_dataset(angular_dataset());" style="width: 100px; height: 30px;"/>
-<input id="buttondata5" type="submit" value="Random" onclick="load_dataset(random_dataset());" style="width: 100px; height: 30px;"/>
+<input id="buttondata6" type="submit" value="Random" onclick="load_dataset(random_dataset());" style="width: 100px; height: 30px;"/>
 <br>
 <p>
     Controls:<br>

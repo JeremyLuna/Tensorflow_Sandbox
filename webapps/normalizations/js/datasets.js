@@ -125,12 +125,13 @@ function angular_dataset(){
     return (360+Math.round(degrees))%360;
   }
 
-
   for (dot = 0; dot < 20; dot++){
     x = randf(-1.0, 1.0)
     y = randf(-1.0, 1.0)
     data.push([x, y]);
     if (get_angle(x, y) > 45 && get_angle(x, y) < 135){
+      labels.push(0);
+    }else if(get_angle(x, y) > 180 && get_angle(x, y) < 225){
       labels.push(0);
     }else{
       labels.push(1);
