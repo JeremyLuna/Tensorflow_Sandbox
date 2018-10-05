@@ -172,8 +172,30 @@ function keyDown(key){
 function keyUp(key) {
 }
 
-function load_dataset(new_dataset){
-    dataset = new_dataset;
+function load_dataset(){
+    switch (document.getElementById("dataset_selector").value) {
+        case "Simple":
+            dataset = simple_dataset();
+            break;
+        case "Cluster":
+            dataset = cluster_dataset();
+            break;
+        case "Circle":
+            dataset = circle_dataset();
+            break;
+        case "Telephone Pole":
+            dataset = telephone_pole_dataset();
+            break;
+        case "Spiral":
+            dataset = spiral_dataset();
+            break;
+        case "Angular":
+            dataset = angular_dataset();
+            break;
+        case "Random":
+            dataset = random_dataset();
+            break;
+    }
     N = dataset['labels'].length;
 }
 
