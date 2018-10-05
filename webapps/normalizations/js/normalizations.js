@@ -1,7 +1,9 @@
 // this is the convjs visualization tool, with a tensorflowjs backend
 // learned from https://cs.stanford.edu/people/karpathy/convnetjs/demo/classify2d.html
 
-// TODO: show tint for confidence
+// TODO: put each thing in text boxes and buttons, and automate their creation
+// TODO: refactor
+// TODO: change layout
 // TODO: fix mouse position
 //   https://www.html5canvastutorials.com/advanced/html5-canvas-mouse-coordinates/
 
