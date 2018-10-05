@@ -136,7 +136,7 @@ function mouseClick(x, y, shiftPressed, ctrlPressed){
 
   // x and y transformed to data space coordinates
   var xt = (x-WIDTH/2 - 390)/ss;
-  var yt = (y-HEIGHT/2 - 200)/ss;
+  var yt = (y-HEIGHT/2 - 180)/ss;
 
   if(ctrlPressed) {
     // remove closest data point
