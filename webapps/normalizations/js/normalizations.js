@@ -1,7 +1,7 @@
 // this is the convjs visualization tool, with a tensorflowjs backend
 // learned from https://cs.stanford.edu/people/karpathy/convnetjs/demo/classify2d.html
 
-// TODO: put each thing in text boxes and buttons, and automate their creation
+// TODO: put dataset back in buttons, hardcode optimizer
 // TODO: refactor
 // TODO: change layout
 // TODO: fix mouse position
@@ -178,30 +178,8 @@ function keyDown(key){
 function keyUp(key) {
 }
 
-function load_dataset(){
-    switch (document.getElementById("dataset_selector").value) {
-        case "Simple":
-            dataset = simple_dataset();
-            break;
-        case "Cluster":
-            dataset = cluster_dataset();
-            break;
-        case "Circle":
-            dataset = circle_dataset();
-            break;
-        case "Telephone Pole":
-            dataset = telephone_pole_dataset();
-            break;
-        case "Spiral":
-            dataset = spiral_dataset();
-            break;
-        case "Angular":
-            dataset = angular_dataset();
-            break;
-        case "Random":
-            dataset = random_dataset();
-            break;
-    }
+function load_dataset(new_dataset){
+    dataset = new_dataset;
     N = dataset['labels'].length;
 }
 

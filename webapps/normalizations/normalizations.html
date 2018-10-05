@@ -26,15 +26,13 @@
 <br>
 
 <h2>Dataset</h2>
-<select id="dataset_selector" onChange="load_dataset()">
-  <option value="Simple">Simple</option>
-  <option value="Cluster">Cluster</option>
-  <option value="Circle">Circle</option>
-  <option value="Telephone Pole">Telephone Pole</option>
-  <option value="Spiral">Spiral</option>
-  <option value="Angular">Angular</option>
-  <option value="Random">Random</option>
-</select>
+<input id="buttondata1" type="submit" value="Simple" onclick="load_dataset(simple_dataset());" style="width: 100px; height: 30px;"/>
+<input id="buttondata2" type="submit" value="Cluster" onclick="load_dataset(cluster_dataset());" style="width: 100px; height: 30px;"/>
+<input id="buttondata3" type="submit" value="Circle" onclick="load_dataset(circle_dataset());" style="width: 100px; height: 30px;"/>
+<input id="buttondata4" type="submit" value="Telephone Pole" onclick="load_dataset(telephone_pole_dataset());" style="width: 100px; height: 30px;"/>
+<input id="buttondata5" type="submit" value="Spiral" onclick="load_dataset(spiral_dataset());" style="width: 100px; height: 30px;"/>
+<input id="buttondata6" type="submit" value="Angular" onclick="load_dataset(angular_dataset());" style="width: 100px; height: 30px;"/>
+<input id="buttondata7" type="submit" value="Random" onclick="load_dataset(random_dataset());" style="width: 100px; height: 30px;"/>
 <p>
     Controls:<br>
     <b>CLICK</b>: Add red data point<br>
