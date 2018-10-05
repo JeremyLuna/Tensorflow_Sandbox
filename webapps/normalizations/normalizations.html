@@ -13,22 +13,21 @@ layout: default
 <center>
 <input id="buttontp" type="submit" value="load network" onclick="reload();" style="width: 400px; height: 50px;"/>
 <br>
-<input id="dense_button" type="submit" value="dense" onclick="load_model(dense_model);" style="width: 200px; height: 33px;"/>
-<input id="manhattan_button" type="submit" value="manhattan" onclick="load_model(manhattan_model);" style="width: 200px; height: 33px;"/>
+<input id="dense_button" type="submit" value="dense" onclick="load_model(dense_model);" style="width: 290px; height: 33px;"/>
+<input id="manhattan_button" type="submit" value="manhattan" onclick="load_model(manhattan_model);" style="width: 290px; height: 33px;"/>
 <br>
-<input id="euclidian_button" type="submit" value="euclidian" onclick="load_model(euclidian_model);" style="width: 200px; height: 33px;"/>
-<input id="angular_button" type="submit" value="angular" onclick="load_model(angular_model);" style="width: 200px; height: 33px;"/>
+<input id="euclidian_button" type="submit" value="euclidian" onclick="load_model(euclidian_model);" style="width: 290px; height: 33px;"/>
+<input id="angular_button" type="submit" value="angular" onclick="load_model(angular_model);" style="width: 290px; height: 33px;"/>
 <br>
 </center>
 <h2 id="loss_display"></h2>
 <center>
-<input id="class_button" type="submit" value="Class" onclick="plot_value = 'class';" style="width: 100px; height: 30px;"/>
-<input id="confidence_button" type="submit" value="Confidence" onclick="plot_value = 'confidence';" style="width: 100px; height: 30px;"/>
-<input id="softmax_button" type="submit" value="Softmax" onclick="plot_value = 'softmax';" style="width: 100px; height: 30px;"/>
+<input id="class_button" type="submit" value="Class" onclick="plot_value = 'class';" style="width: 130px; height: 30px;"/>
+<input id="confidence_button" type="submit" value="Confidence" onclick="plot_value = 'confidence';" style="width: 130px; height: 30px;"/>
+<input id="softmax_button" type="submit" value="Softmax" onclick="plot_value = 'softmax';" style="width: 130px; height: 30px;"/>
 <br>
 <canvas id="NPGcanvas" width="400" height="400">Browser not supported for Canvas. Get a real browser.</canvas>
 </center>
-<br>
 <h2>Dataset</h2>
 <center>
 <input id="buttondata0" type="submit" value="Simple" onclick="load_dataset(simple_dataset());" style="width: 100px; height: 30px;"/>
