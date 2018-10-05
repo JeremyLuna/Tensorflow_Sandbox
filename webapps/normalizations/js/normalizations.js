@@ -17,20 +17,24 @@ column_pixel_count = 0;
 plot_value = 'class'; // 'class'|'softmax'|'confidence'
 
 // create neural net
-var predict, loss, optimizer, train;
+
+function loss(prediction, target){
+  return tf.tidy(function(){
+    return tf.losses.softmaxCrossEntropy(prediction, target);
+  });
+}
+
+function train (inputs, labels){
+  optimizer.minimize(function() {
+    predictions = predict(inputs);
+    stepLoss = loss(predictions, labels);
+    document.getElementById("loss_display").innerHTML = "Loss: " + stepLoss;
+    return stepLoss;
+  });
+};
 
 async function reload() {
   eval(document.getElementById('layerdef').value);
-
-  train = function(inputs, labels){
-    optimizer.minimize(function() {
-      predictions = predict(inputs);
-      stepLoss = loss(predictions, labels);
-      document.getElementById("loss_display").innerHTML = "Loss: " + stepLoss;
-      return stepLoss;
-    });
-  };
-
 }
 
 function myinit() {
@@ -64,7 +68,7 @@ async function update(){// TODO: minibatches
 
 async function draw(){
     // clear canvas
-    // TODO: do I need this? makes it flicker but might clear memory
+    // do I need this? makes it flicker but might clear memory
     // ctx.clearRect(0,0,WIDTH,HEIGHT);
 
     // draw decisions in the grid

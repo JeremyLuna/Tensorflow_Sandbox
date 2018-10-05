@@ -16,12 +16,6 @@ predict = function(input){\n\
   });\n\
 };\n\
 \n\
-function loss(prediction, target){\n\
-return tf.tidy(function(){\n\
-  return tf.losses.softmaxCrossEntropy(prediction, target);\n\
-});\n\
-}\n\
-\n\
 optimizer = tf.train.adam(.01);\n\
 ";
 
@@ -41,12 +35,6 @@ predict = function(input){\n\
   });\n\
 };\n\
 \n\
-function loss(prediction, target){\n\
-return tf.tidy(function(){\n\
-  return tf.losses.softmaxCrossEntropy(prediction, target);\n\
-});\n\
-}\n\
-\n\
 optimizer = tf.train.adam(.01);\n\
 ";
 
@@ -64,12 +52,6 @@ predict = function(input){\n\
     return net;\n\
   });\n\
 };\n\
-\n\
-function loss(prediction, target){\n\
-return tf.tidy(function(){\n\
-  return tf.losses.softmaxCrossEntropy(prediction, target);\n\
-});\n\
-}\n\
 \n\
 optimizer = tf.train.adam(.01);\n\
 ";
@@ -91,12 +73,6 @@ predict = function(input){\n\
     return net;\n\
   });\n\
 };\n\
-\n\
-function loss(prediction, target){\n\
-return tf.tidy(function(){\n\
-  return tf.losses.softmaxCrossEntropy(prediction, target);\n\
-});\n\
-}\n\
 \n\
 optimizer = tf.train.adam(.01);\n\
 ";
