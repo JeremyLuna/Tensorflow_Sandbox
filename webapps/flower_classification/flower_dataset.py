@@ -16,25 +16,15 @@ class Flower_Dataset:
 
     classes = [] # in alphabetical order
     classes_count = 0
-
     data_count = 0
-    train_data_count = 0
-    test_data_count = 0
 
-    train_data_paths = []
-    test_data_paths = []
+    train_examples = {"index": None,
+                      "example_info": None}
+    test_examples = {"index": None,
+                     "example_info": None}
 
-    train_data_index = 0
-    test_data_index = 0
-
-    def __init__(self):
-        self.init()
-
-    def __init__(self, data_dir):
+    def __init__(self, data_dir, portion_for_training, aug_mirror_x):
         self.data_dir = data_dir
-        self.init()
-
-    def init(self):
         self.classes = listdir(self.data_dir)
         self.classes_count = len(self.classes)
         for a_class in self.classes:
@@ -52,40 +42,21 @@ class Flower_Dataset:
         shuffle(self.train_data_paths)
         shuffle(self.test_data_paths)
 
-    def get_next_train_batch(self, examples):
-        data = {'examples': [], 'labels': []}
-        diff = (self.train_data_index + examples) - self.train_data_count
+    def get_next_batch(data_stream, # self.train_examples or self.test_examples
+                       examples):   # number of examples in the batch
+        batch_examples = {'examples': [], 'labels': []}
+        diff = (data_stream["index"] + examples) - len(data_stream["example_info"])
         if diff <= 0:
-            indexes_to_use = range(self.train_data_index, self.train_data_index + examples)
+            indexes_to_use = range(data_stream["index"], data_stream["index"] + examples)
         else:
-            indexes_to_use = list(range(self.train_data_index, self.train_data_count)) + list(range(diff))
+            indexes_to_use = list(range(data_stream["index"], len(data_stream["example_info"]))) + list(range(diff))
         for example in indexes_to_use:
             try:
-                if (self.train_data_paths[example] != 'mosaic/23mosaicvirus4.jpg'):
-                    im = misc.imread(self.data_dir + '/' + self.train_data_paths[example], mode='RGB')
-                    im = resize(im/255, size) #getdata, putdata
-                    data['examples'].append(im)
-                    data['labels'].append(self.classes.index(self.train_data_paths[example].split('/')[0]))
+                im = misc.imread(self.data_dir + '/' + self.train_data_paths[example], mode='RGB')
+                im = resize(im/255, size) # getdata, putdata
+                batch_examples['examples'].append(im)
+                batch_examples['labels'].append(self.classes.index(self.train_data_paths[example].split('/')[0]))
             except:
                 print("unreadable example: " + self.train_data_paths[example])
-            self.train_data_index = example
-        return data
-
-    def get_next_test_batch(self, examples):
-        data = {'examples': [], 'labels': []}
-        diff = (self.test_data_index + examples) - self.test_data_count
-        if diff <= 0:
-            indexes_to_use = range(self.test_data_index, self.test_data_index + examples)
-        else:
-            indexes_to_use = list(range(self.test_data_index, self.test_data_count)) + list(range(diff))
-        for example in indexes_to_use:
-            try:
-                if (self.test_data_paths[example] != 'mosaic/23mosaicvirus4.jpg'):
-                    im = misc.imread(self.data_dir + '/' + self.test_data_paths[example], mode='RGB')
-                    im = resize(im/255, size)
-                    data['examples'].append(im)
-                    data['labels'].append(self.classes.index(self.test_data_paths[example].split('/')[0]))
-            except Exception as e:
-                print("unreadable example: " + self.test_data_paths[example])
-            self.test_data_index = example
-        return data
+        self.train_data_index = example+1
+        return batch_examples
