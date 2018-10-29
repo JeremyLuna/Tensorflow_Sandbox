@@ -1,5 +1,5 @@
 # labels are yeilded by path
-# TODO: shuffle
+# TODO: data should be a struct with flower, disease, augmentation, path info
 
 from os import listdir
 from os.path import isfile, join
