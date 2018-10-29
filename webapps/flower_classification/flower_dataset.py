@@ -23,7 +23,7 @@ class Flower_Dataset:
     test_examples = {"index": None,
                      "example_info": None}
 
-    def __init__(self, data_dir, portion_for_training, aug_mirror_x):
+    def __init__(self, data_dir, augment_functions):
         self.data_dir = data_dir
         self.classes = listdir(self.data_dir)
         self.classes_count = len(self.classes)
@@ -42,6 +42,7 @@ class Flower_Dataset:
         shuffle(self.train_data_paths)
         shuffle(self.test_data_paths)
 
+    # todo: use np.fliplr conditionally
     def get_next_batch(data_stream, # self.train_examples or self.test_examples
                        examples):   # number of examples in the batch
         batch_examples = {'examples': [], 'labels': []}
@@ -50,13 +51,13 @@ class Flower_Dataset:
             indexes_to_use = range(data_stream["index"], data_stream["index"] + examples)
         else:
             indexes_to_use = list(range(data_stream["index"], len(data_stream["example_info"]))) + list(range(diff))
-        for example in indexes_to_use:
+        for example_index in indexes_to_use:
             try:
-                im = misc.imread(self.data_dir + '/' + self.train_data_paths[example], mode='RGB')
+                im = misc.imread(self.data_dir + '/' + self.train_data_paths[example_index], mode='RGB')
                 im = resize(im/255, size) # getdata, putdata
                 batch_examples['examples'].append(im)
-                batch_examples['labels'].append(self.classes.index(self.train_data_paths[example].split('/')[0]))
+                batch_examples['labels'].append(self.classes.index(self.train_data_paths[example_index].split('/')[0]))
             except:
-                print("unreadable example: " + self.train_data_paths[example])
-        self.train_data_index = example+1
+                print("unreadable example: " + self.train_data_paths[example_index])
+        self.train_data_index = example_index+1
         return batch_examples
