@@ -89,21 +89,21 @@ biases = tf.variable(tf.randomNormal(shape=[1, 2], mean=0.5, stdDev=0.2));\n\
 \n\
 predict = function(input){\n\
   return tf.tidy(function(){\n\
-    \\ dense layer\n\
+    // dense layer\n\
     dense_net = tf.matMul(input, dense_features).add(dense_bias);\n\
     dense_net = tf.relu(dense_net);\n\
     \n\
-    \\ manhattan layer\n\
+    // manhattan layer\n\
     manhattan_net = tf.expandDims(input, 2);\n\
     manhattan_net = tf.sub(manhattan_features, manhattan_net);\n\
     manhattan_net = tf.tanh(tf.norm(manhattan_net, ord=1, axis=1, keepDims=false));\n\
     \n\
-    \\ euclidian layer\n\
+    // euclidian layer\n\
     euclidian_net = tf.expandDims(input, 2);\n\
     euclidian_net = tf.sub(euclidian_features, euclidian_net);\n\
     euclidian_net = tf.tanh(tf.norm(euclidian_net, ord=2, axis=1, keepDims=false));\n\
     \n\
-    \\ angular layer\n\
+    // angular layer\n\
     angle_net = tf.matMul(input, angle_features);\n\
     angle_net = tf.div(angle_net, tf.norm(angle_features, ord=2, axis=0, keepDims=false));\n\
     angle_net = tf.div(angle_net, tf.norm(input, ord=2, axis=1, keepDims=false).expandDims(1));\n\
