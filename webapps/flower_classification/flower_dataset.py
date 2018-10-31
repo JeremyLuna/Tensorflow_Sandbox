@@ -1,7 +1,7 @@
 # labels are yeilded by path
 # TODO: data should be a struct with flower, disease, augmentation, path info
 
-from os import listdir
+from os import listdir, walk
 from os.path import isfile, join
 from random import shuffle
 import numpy as np
@@ -19,28 +19,37 @@ class Flower_Dataset:
     data_count = 0
 
     train_examples = {"index": None,
-                      "example_info": None}
+                      "example_info": None} # should be list of {"path": None, "augmentations": [functions to apply to it to augment it]}
     test_examples = {"index": None,
-                     "example_info": None}
+                     "example_info": None} # should be list of {"path": None, "augmentations": [functions to apply to it to augment it]}
 
     def __init__(self, data_dir, augment_functions):
         self.data_dir = data_dir
-        self.classes = listdir(self.data_dir)
-        self.classes_count = len(self.classes)
-        for a_class in self.classes:
-            example_paths = listdir(self.data_dir + '/' + a_class + '/')
-            example_count = len(example_paths)
-            train_example_count = int(train_ratio * example_count)
-            test_example_count = example_count - train_example_count
-            for file_name_index in range(int(train_example_count)):
-                self.train_data_paths.append(a_class + "/" + example_paths[file_name_index])
-            for file_name_index in range(train_example_count, example_count):
-                self.test_data_paths.append(a_class + "/" + example_paths[file_name_index])
-        # shuffle
-        self.train_data_count = len(self.train_data_paths)
-        self.test_data_count = len(self.test_data_paths)
-        shuffle(self.train_data_paths)
-        shuffle(self.test_data_paths)
+        # get list of all image file paths
+        paths = []
+        for (dirpath, dirnames, filenames) in walk(self.data_dir):
+            print(dirpath)
+            paths += map(lambda a: dirpath + "/" + a, filenames)
+        if len(paths) == 0:
+            print("incorrect dataset path")
+
+        # returns ["a/s/d/f"] from ["data_dir/a/s/d/f/img.png"] todo: check
+        self.classes = list(set(map(lambda a: a[len(self.data_dir):].split('/')[:-1].join('/'), paths)))
+        # self.classes_count = len(self.classes)
+        # for a_class in self.classes:
+        #     example_paths = listdir(self.data_dir + '/' + a_class + '/')
+        #     example_count = len(example_paths)
+        #     train_example_count = int(train_ratio * example_count)
+        #     test_example_count = example_count - train_example_count
+        #     for file_name_index in range(int(train_example_count)):
+        #         self.train_data_paths.append(a_class + "/" + example_paths[file_name_index])
+        #     for file_name_index in range(train_example_count, example_count):
+        #         self.test_data_paths.append(a_class + "/" + example_paths[file_name_index])
+        # # shuffle
+        # self.train_data_count = len(self.train_data_paths)
+        # self.test_data_count = len(self.test_data_paths)
+        # shuffle(self.train_data_paths)
+        # shuffle(self.test_data_paths)
 
     # todo: use np.fliplr conditionally
     def get_next_batch(data_stream, # self.train_examples or self.test_examples

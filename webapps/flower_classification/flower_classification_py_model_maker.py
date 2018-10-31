@@ -5,13 +5,14 @@
 # 38.64% accuracy
 
 import tensorflow as tf
+import numpy as np
 from flower_dataset import Flower_Dataset
 from scipy import misc
 
 batch_size = 100
 epochs = 20
 log_level = 2
-dataset = Flower_Dataset("F:/programming/bina/plant_disease/rose")
+dataset = Flower_Dataset("F:/programming/bina/plant_disease/", [np.fliplr])
 
 x = tf.placeholder('float', [None, 100, 100, 3])
 y = tf.placeholder('int64', [None])
