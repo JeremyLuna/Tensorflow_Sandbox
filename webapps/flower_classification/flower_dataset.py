@@ -16,11 +16,12 @@ class Flower_Dataset:
 
     classes = [] # in alphabetical order
     classes_count = 0
-    data_count = 0
 
     train_examples = {"index": None,
+                      "count": None,
                       "example_info": None} # should be list of {"path": None, "augmentations": [functions to apply to it to augment it]}
     test_examples = {"index": None,
+                     "count": None,
                      "example_info": None} # should be list of {"path": None, "augmentations": [functions to apply to it to augment it]}
 
     def __init__(self, data_dir, augment_functions):
@@ -35,7 +36,7 @@ class Flower_Dataset:
 
         # returns ["a/s/d/f"] from ["data_dir/a/s/d/f/img.png"] todo: check
         self.classes = list(set(map(lambda a: a[len(self.data_dir):].split('/')[:-1].join('/'), paths)))
-        # self.classes_count = len(self.classes)
+        self.classes_count = len(self.classes)
         # for a_class in self.classes:
         #     example_paths = listdir(self.data_dir + '/' + a_class + '/')
         #     example_count = len(example_paths)
@@ -55,11 +56,11 @@ class Flower_Dataset:
     def get_next_batch(data_stream, # self.train_examples or self.test_examples
                        examples):   # number of examples in the batch
         batch_examples = {'examples': [], 'labels': []}
-        diff = (data_stream["index"] + examples) - len(data_stream["example_info"])
+        diff = (data_stream["index"] + examples) - data_stream["count"]
         if diff <= 0:
             indexes_to_use = range(data_stream["index"], data_stream["index"] + examples)
         else:
-            indexes_to_use = list(range(data_stream["index"], len(data_stream["example_info"]))) + list(range(diff))
+            indexes_to_use = list(range(data_stream["index"], data_stream["count"])) + list(range(diff))
         for example_index in indexes_to_use:
             try:
                 im = misc.imread(self.data_dir + '/' + self.train_data_paths[example_index], mode='RGB')
