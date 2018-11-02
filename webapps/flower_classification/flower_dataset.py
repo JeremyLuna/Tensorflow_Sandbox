@@ -1,5 +1,10 @@
-# labels are yeilded by path
-# TODO: data should be a struct with flower, disease, augmentation, path info
+'''
+TODO:
+    does get get_intermediate_directories work?
+    should I augment test set?
+    might have infinite loop in program
+    how to handle size
+'''
 
 from os import listdir, walk
 from os.path import isfile, join
@@ -8,51 +13,58 @@ import numpy as np
 from skimage.transform import resize
 from scipy import misc
 
-size = (100, 100)
-train_ratio = .7
 
 class Flower_Dataset:
     data_dir = ""
 
     classes = [] # in alphabetical order
     classes_count = 0
+    examples_count = 0
 
     train_examples = {"index": None,
                       "count": None,
-                      "example_info": None} # should be list of {"path": None, "augmentations": [functions to apply to it to augment it]}
+                      "example_info": []} # should be list of {"path": None, "augmentations": [functions to apply to it to augment it]}
     test_examples = {"index": None,
                      "count": None,
-                     "example_info": None} # should be list of {"path": None, "augmentations": [functions to apply to it to augment it]}
+                     "example_info": []} # should be list of {"path": None, "augmentations": [functions to apply to it to augment it]}
 
-    def __init__(self, data_dir, augment_functions):
+    size = (100, 100)
+
+    def __init__(self,
+                 data_dir,
+                 train_ratio, # .7
+                 augmentation_functions):
         self.data_dir = data_dir
+
         # get list of all image file paths
         paths = []
         for (dirpath, dirnames, filenames) in walk(self.data_dir):
             print(dirpath)
             paths += map(lambda a: dirpath + "/" + a, filenames)
-        if len(paths) == 0:
+        examples_count = len(paths)
+        if example_count == 0:
             print("incorrect dataset path")
 
-        # returns ["a/s/d/f"] from ["data_dir/a/s/d/f/img.png"] todo: check
-        self.classes = list(set(map(lambda a: a[len(self.data_dir):].split('/')[:-1].join('/'), paths)))
+        # returns ["a/s/d/f"] from ["data_dir/a/s/d/f/img.png"]
+        self.classes = list(set(map(lambda p: self.get_intermediate_directories(p), paths)))
         self.classes_count = len(self.classes)
-        # for a_class in self.classes:
-        #     example_paths = listdir(self.data_dir + '/' + a_class + '/')
-        #     example_count = len(example_paths)
-        #     train_example_count = int(train_ratio * example_count)
-        #     test_example_count = example_count - train_example_count
-        #     for file_name_index in range(int(train_example_count)):
-        #         self.train_data_paths.append(a_class + "/" + example_paths[file_name_index])
-        #     for file_name_index in range(train_example_count, example_count):
-        #         self.test_data_paths.append(a_class + "/" + example_paths[file_name_index])
-        # # shuffle
-        # self.train_data_count = len(self.train_data_paths)
-        # self.test_data_count = len(self.test_data_paths)
-        # shuffle(self.train_data_paths)
-        # shuffle(self.test_data_paths)
 
-    # todo: use np.fliplr conditionally
+        # shuffle
+        shuffle(paths)
+
+        # divide up paths between training and testing
+        self.train_examples["count"] = int(self.train_ratio * self.examples_count)
+        self.test_examples["count"] = self.examples_count - self.train_examples["count"]
+        for path in paths[:self.train_examples["count"]]:
+            self.train_examples["example_info"].append({"path": path, "augmentations": []})
+        for path in paths[self.train_examples["count"]:]:
+            self.test_examples["example_info"].append({"path": path, "augmentations": []})
+
+        # record augmentations
+        for augmentation_function in augmentation_functions:
+            for example_info in self.train_examples["example_info"]:
+                example_info["augmentations"].append(augmentation_function) # TODO: will this inf loop?
+
     def get_next_batch(data_stream, # self.train_examples or self.test_examples
                        examples):   # number of examples in the batch
         batch_examples = {'examples': [], 'labels': []}
@@ -63,11 +75,16 @@ class Flower_Dataset:
             indexes_to_use = list(range(data_stream["index"], data_stream["count"])) + list(range(diff))
         for example_index in indexes_to_use:
             try:
-                im = misc.imread(self.data_dir + '/' + self.train_data_paths[example_index], mode='RGB')
+                im = misc.imread(self.train_examples["example_info"]["path"], mode='RGB')
                 im = resize(im/255, size) # getdata, putdata
+                for augmentation_function in self.train_examples["example_info"]["augmentation_functions"]
+                    im = augmentation_function(im)
                 batch_examples['examples'].append(im)
-                batch_examples['labels'].append(self.classes.index(self.train_data_paths[example_index].split('/')[0]))
+                batch_examples['labels'].append(self.get_intermediate_directories(self.train_examples["example_info"]["path"]))
             except:
                 print("unreadable example: " + self.train_data_paths[example_index])
-        self.train_data_index = example_index+1
+        self.train_examples["index"] = example_index+1
         return batch_examples
+
+    def get_intermediate_directories(self, path):
+        return path[len(self.data_dir):].split('/')[:-1].join('/')
