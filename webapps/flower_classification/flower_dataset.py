@@ -3,7 +3,7 @@ TODO:
     does get get_intermediate_directories work?
     should I augment test set?
     might have infinite loop in program
-    how to handle size
+    how to handle size parameter
 '''
 
 from os import listdir, walk
@@ -17,7 +17,7 @@ from scipy import misc
 class Flower_Dataset:
     data_dir = ""
 
-    classes = [] # in alphabetical order
+    classes = [] # in alphabetical order? todo
     classes_count = 0
     examples_count = 0
 
@@ -76,11 +76,12 @@ class Flower_Dataset:
         for example_index in indexes_to_use:
             try:
                 im = misc.imread(self.train_examples["example_info"]["path"], mode='RGB')
-                im = resize(im/255, size) # getdata, putdata
+                im = resize(im/255, size)
                 for augmentation_function in self.train_examples["example_info"]["augmentation_functions"]
                     im = augmentation_function(im)
                 batch_examples['examples'].append(im)
-                batch_examples['labels'].append(self.get_intermediate_directories(self.train_examples["example_info"]["path"]))
+                label = self.get_intermediate_directories(self.train_examples["example_info"]["path"])
+                batch_examples['labels'].append(this.classes.index(label))
             except:
                 print("unreadable example: " + self.train_data_paths[example_index])
         self.train_examples["index"] = example_index+1
