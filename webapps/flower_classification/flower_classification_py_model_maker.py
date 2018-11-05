@@ -12,13 +12,15 @@ from scipy import misc
 batch_size = 100
 epochs = 20
 log_level = 2
-dataset = Flower_Dataset("F:/programming/bina/plant_disease/", [np.fliplr])
+dataset = Flower_Dataset("F:/programming/bina/plant_disease/",
+                         .7,
+                         [np.fliplr])
 
 x = tf.placeholder('float', [None, 100, 100, 3])
 y = tf.placeholder('int64', [None])
 
 net = x
-net = tf.reshape(net, [-1, 100, 100, 3])
+net = tf.reshape(net, [-1, 100, 100, 3]) # TODO: why am I reshaping it?
 net = tf.layers.conv2d(net,
     filters = 8,
     kernel_size = 7,
@@ -36,28 +38,28 @@ loss = tf.reduce_mean(tf.losses.softmax_cross_entropy(tf.one_hot(y, dataset.clas
 with tf.name_scope('OPTIMIZATION'):
     optimizer = tf.train.AdamOptimizer().minimize(loss)
 
-#train
+# train
 with tf.Session() as sess:
     sess.run(tf.global_variables_initializer())
-    steps = int(dataset.train_data_count/batch_size)
+    steps = int(dataset.train_examples["count"]/batch_size)
     for epoch in range(epochs):
         print("EPOCH: ", epoch+1, "/", epochs)
         for step in range(steps):
-            data = dataset.get_next_train_batch(batch_size)
+            data = dataset.get_next_batch(dataset.train_examples, batch_size)
             x_data, y_data = data['examples'], data['labels']
             o, l = sess.run([optimizer, loss], feed_dict = {x: x_data, y: y_data})
             if log_level > 0:
                 print("STEP: ", step+1, "/", steps, " STEP LOSS: ", l)
 
     correct_c = 0
-    test_steps = int(dataset.test_data_count/batch_size)
+    test_steps = int(dataset.test_examples["count"]/batch_size)
     for test_steps in range(test_steps):
-        data = dataset.get_next_test_batch(batch_size)
+        data = dataset.get_next_batch(dataset.test_examples, batch_size)
         x_data, y_data = data['examples'], data['labels']
         correct = sess.run(tf.count_nonzero(tf.equal(tf.argmax(net, 1), y)),
                             feed_dict = {x: x_data, y: y_data})
         correct_c += correct
-    accuracy = correct_c / dataset.test_data_count
+    accuracy = correct_c / dataset.test_examples["count"]
     print("Test Accuracy: ", accuracy)
 
     # this line shows the names in the nodes, so I can find the node to
