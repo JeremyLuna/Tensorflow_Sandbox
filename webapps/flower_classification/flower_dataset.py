@@ -95,6 +95,7 @@ class Flower_Dataset:
         return batch_examples
 
     def get_intermediate_directories(self, path):
+        print(path)
         return '/'.join(path[len(self.data_dir):].split('/')[:-1])
 
     def normalize_path(path):
