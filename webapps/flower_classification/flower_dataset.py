@@ -12,6 +12,7 @@ from random import shuffle
 import numpy as np
 from skimage.transform import resize
 from scipy import misc
+import copy
 
 
 class Flower_Dataset:
@@ -66,13 +67,17 @@ class Flower_Dataset:
 
         # record augmentations
         for augmentation_function in augmentation_functions:
-            for example_info in self.train_examples["example_info"]:
-                example_info["augmentation_functions"].append(augmentation_function) # TODO: will this inf loop?
-        print(self.classes)
+            a = copy.deepcopy(self.train_examples["example_info"])
+            for e in a:
+                e["augmentation_functions"].append(augmentation_function)
+            self.train_examples["example_info"] += a
+
+        shuffle(self.train_examples["example_info"])
 
     def get_next_batch(self,
                        data_stream, # self.train_examples or self.test_examples
                        examples):   # number of examples in the batch
+        print("getting next batch")
         batch_examples = {'examples': [], 'labels': []}
         diff = (data_stream["index"] + examples) - data_stream["count"]
         if diff <= 0:
@@ -80,23 +85,23 @@ class Flower_Dataset:
         else:
             indexes_to_use = list(range(data_stream["index"], data_stream["count"])) + list(range(diff))
         for example_index in indexes_to_use:
-            # try:
-            im = misc.imread(data_stream["example_info"][example_index]["path"], mode='RGB')
-            im = resize(im/255, self.size)
-            print("readable example: " + data_stream["example_info"][example_index]["path"])
-            for augmentation_function in data_stream["example_info"][example_index]["augmentation_functions"]:
-                im = augmentation_function(im)
-            batch_examples['examples'].append(im)
-            label = self.get_intermediate_directories(data_stream["example_info"][example_index]["path"])
-            batch_examples['labels'].append(self.classes.index(label))
-            # except:
-            #     print("unreadable example: " + data_stream["example_info"][example_index]["path"])
+            try:
+                im = misc.imread(data_stream["example_info"][example_index]["path"], mode='RGB')
+                im = resize(im/255, self.size)
+                for augmentation_function in data_stream["example_info"][example_index]["augmentation_functions"]:
+                    im = augmentation_function(im)
+                batch_examples['examples'].append(im)
+                label = self.get_intermediate_directories(data_stream["example_info"][example_index]["path"])
+                batch_examples['labels'].append(self.classes.index(label))
+            except Exception as e:
+                print(e)
+                print("unreadable example: " + data_stream["example_info"][example_index]["path"])
         data_stream["index"] = example_index+1
+        print("got batch")
         return batch_examples
 
     def get_intermediate_directories(self, path):
-        print(path)
         return '/'.join(path[len(self.data_dir):].split('/')[:-1])
 
     def normalize_path(path):
-        path = path.replace('\\', '/')
+        return path.replace('\\', '/')
