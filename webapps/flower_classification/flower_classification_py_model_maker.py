@@ -1,6 +1,7 @@
 # saves an mnist model in the form "SavedModel"
 # converted previously using the command:
 # tensorflowjs_converter --input_format=tf_saved_model --output_node_names="net_out/BiasAdd" py_model_saves js_model_saves
+# use python -m cProfile .\flower_classification_py_model_maker.py to profile
 
 # 38.64% accuracy
 
@@ -13,9 +14,11 @@ batch_size = 100
 epochs = 20
 log_level = 2
 '''
-dataset = Flower_Dataset("F:/programming/bina/plant_disease/",
-'''
 dataset = Flower_Dataset("I:/Rahnemoonfar group/Datasets/plant_disease/",
+dataset = Flower_Dataset("F:/programming/bina/plant_disease/",
+dataset = Flower_Dataset("G:/programming/bina/plant_disease/",
+'''
+dataset = Flower_Dataset("C:/datasets/plant_disease/",
                          .7,
                          [np.fliplr])
 
@@ -41,7 +44,9 @@ loss = tf.reduce_mean(tf.losses.softmax_cross_entropy(tf.one_hot(y, dataset.clas
 with tf.name_scope('OPTIMIZATION'):
     optimizer = tf.train.AdamOptimizer().minimize(loss)
 
+
 # train
+print("bout to train")
 with tf.Session() as sess:
     sess.run(tf.global_variables_initializer())
     steps = int(dataset.train_examples["count"]/batch_size)

@@ -14,7 +14,6 @@ from skimage.transform import resize
 from scipy import misc
 import copy
 
-
 class Flower_Dataset:
     data_dir = ""
     train_ratio = None
@@ -40,7 +39,9 @@ class Flower_Dataset:
         self.train_ratio = train_ratio
 
         # get list of all image file paths
+        print("initializing dataset")
         paths = []
+        print("getting paths")
         for (dirpath, dirnames, filenames) in walk(self.data_dir):
             paths += map(lambda a: dirpath + "/" + a, filenames)
         self.examples_count = len(paths)
@@ -48,16 +49,20 @@ class Flower_Dataset:
             print("incorrect dataset path")
             exit()
         # only use forward slashes
+        print("normalizing paths")
         paths = list(map(Flower_Dataset.normalize_path, paths))
 
         # returns ["a/s/d/f"] from ["data_dir/a/s/d/f/img.png"]
+        print("getting classes")
         self.classes = list(set(map(lambda p: self.get_intermediate_directories(p), paths)))
         self.classes_count = len(self.classes)
 
         # shuffle paths
+        print("shuffling")
         shuffle(paths)
 
         # divide up paths between training and testing
+        print("making train and test sets")
         self.train_examples["count"] = int(self.train_ratio * self.examples_count)
         self.test_examples["count"] = self.examples_count - self.train_examples["count"]
         for path in paths[:self.train_examples["count"]]:
@@ -65,14 +70,16 @@ class Flower_Dataset:
         for path in paths[self.train_examples["count"]:]:
             self.test_examples["example_info"].append({"path": path, "augmentation_functions": []})
 
-        # record augmentations
+        print("record augmentations")
         for augmentation_function in augmentation_functions:
             a = copy.deepcopy(self.train_examples["example_info"])
             for e in a:
                 e["augmentation_functions"].append(augmentation_function)
             self.train_examples["example_info"] += a
 
+        print("shuffling")
         shuffle(self.train_examples["example_info"])
+        print("finished initializing dataset")
 
     def get_next_batch(self,
                        data_stream, # self.train_examples or self.test_examples
