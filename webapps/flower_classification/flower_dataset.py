@@ -13,6 +13,7 @@ import numpy as np
 from skimage.transform import resize
 from scipy import misc
 import copy
+import tensorflow as tf
 
 class Flower_Dataset:
     data_dir = ""
@@ -94,8 +95,14 @@ class Flower_Dataset:
             indexes_to_use = list(range(data_stream["index"], data_stream["count"])) + list(range(diff))
         for example_index in indexes_to_use:
             try:
-                im = misc.imread(data_stream["example_info"][example_index]["path"], mode='RGB')
-                im = resize(im/255, self.size)
+                print("reading")
+                # im = misc.imread(data_stream["example_info"][example_index]["path"], mode='RGB')
+                im = tf.image.decode_image(data_stream["example_info"][example_index]["path"], channels=3, dtype=tf.float32)
+                print(im)
+                input()
+                print("resizing")
+                im = resize(im/255, self.size) # TODO use tf.image.crop_and_resize
+                print("augmenting")
                 for augmentation_function in data_stream["example_info"][example_index]["augmentation_functions"]:
                     im = augmentation_function(im)
                 batch_examples['examples'].append(im)
