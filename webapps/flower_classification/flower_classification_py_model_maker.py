@@ -14,11 +14,11 @@ batch_size = 100
 epochs = 20
 log_level = 2
 '''
-dataset = Flower_Dataset("I:/Rahnemoonfar group/Datasets/plant_disease/",
 dataset = Flower_Dataset("F:/programming/bina/plant_disease/",
 dataset = Flower_Dataset("G:/programming/bina/plant_disease/",
-'''
 dataset = Flower_Dataset("C:/datasets/plant_disease/",
+'''
+dataset = Flower_Dataset("I:/Rahnemoonfar group/Datasets/plant_disease/",
                          .7,
                          [np.fliplr])
 
