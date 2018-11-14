@@ -29,7 +29,7 @@ class Flower_Dataset:
                      "count": None,
                      "example_info": []} # should be list of {"path": None, "augmentations": [functions to apply to it to augment it]}
 
-    size = (100, 100)
+    size = (128, 128)
 
     def __init__(self,
                  data_dir,
@@ -56,6 +56,7 @@ class Flower_Dataset:
         print("getting classes")
         self.classes = list(set(map(lambda p: self.get_intermediate_directories(p), paths)))
         self.classes_count = len(self.classes)
+        self.classes.sort() # classes change order between runs without this
 
         # shuffle paths
         print("shuffling")

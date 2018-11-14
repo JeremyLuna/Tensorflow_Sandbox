@@ -22,17 +22,17 @@ dataset = Flower_Dataset("C:/datasets/plant_disease/",
                          .7,
                          [np.fliplr])
 
-x = tf.placeholder('float', [None, 100, 100, 3])
+x = tf.placeholder('float', [None, dataset.size[0], dataset.size[1], 3])
 y = tf.placeholder('int64', [None])
 
 net = x
-net = tf.reshape(net, [-1, 100, 100, 3]) # TODO: why am I reshaping it?
+net = tf.reshape(net, [-1, dataset.size[0], dataset.size[1], 3]) # TODO: why am I reshaping it?
 net = tf.layers.conv2d(net,
     filters = 8,
     kernel_size = 7,
     padding = 'same',
     activation = tf.nn.relu)
-net = tf.reshape(net, [-1, 100*100*8])
+net = tf.reshape(net, [-1, dataset.size[0]*dataset.size[1]*8])
 net = tf.layers.dense(net,
     units = 64,
     activation = tf.nn.relu)
