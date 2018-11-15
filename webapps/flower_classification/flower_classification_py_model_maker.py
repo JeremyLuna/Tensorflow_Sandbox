@@ -9,10 +9,11 @@ import tensorflow as tf
 import numpy as np
 from flower_dataset import Flower_Dataset
 
-batch_size = 100
+batch_size = 200
 epochs = 20
 log_level = 2
-'''
+
+''' possible directories
 dataset = Flower_Dataset("F:/programming/bina/plant_disease/",
 dataset = Flower_Dataset("G:/programming/bina/plant_disease/",
 dataset = Flower_Dataset("I:/Rahnemoonfar group/Datasets/plant_disease/",
@@ -27,11 +28,21 @@ y = tf.placeholder('int64', [None])
 net = x
 net = tf.reshape(net, [-1, dataset.size[0], dataset.size[1], 3]) # TODO: why am I reshaping it?
 net = tf.layers.conv2d(net,
-    filters = 8,
+    filters = 16,
     kernel_size = 7,
     padding = 'same',
     activation = tf.nn.relu)
-net = tf.reshape(net, [-1, dataset.size[0]*dataset.size[1]*8])
+net = tf.layers.conv2d(net,
+    filters = 32,
+    kernel_size = 7,
+    padding = 'same',
+    activation = tf.nn.relu)
+net = tf.layers.conv2d(net,
+    filters = 16,
+    kernel_size = 7,
+    padding = 'same',
+    activation = tf.nn.relu)
+net = tf.reshape(net, [-1, dataset.size[0]*dataset.size[1]*16])
 net = tf.layers.dense(net,
     units = 64,
     activation = tf.nn.relu)
@@ -52,8 +63,12 @@ with tf.Session() as sess:
     for epoch in range(epochs):
         print("EPOCH: ", epoch+1, "/", epochs)
         for step in range(steps):
+            print("reading batch...", end='\n')
             data = dataset.get_next_batch(dataset.train_examples, batch_size)
-            x_data, y_data = data['examples'], data['labels']
+            y_data = data['labels']
+            x_data = sess.run(data['examples'])
+            x_data = np.stack(x_data)
+            print("done")
             o, l = sess.run([optimizer, loss], feed_dict = {x: x_data, y: y_data})
             if log_level > 0:
                 print("STEP: ", step+1, "/", steps, " STEP LOSS: ", l)

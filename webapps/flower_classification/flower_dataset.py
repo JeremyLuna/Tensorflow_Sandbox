@@ -1,17 +1,10 @@
 '''
 TODO:
-    does get get_intermediate_directories work?
-    should I augment test set?
-    might have infinite loop in program
-    how to handle size parameter
+    how to automate size parameter
 '''
 
-from os import listdir, walk
-from os.path import isfile, join
+from os import walk
 from random import shuffle
-import numpy as np
-from skimage.transform import resize
-from scipy import misc
 import copy
 import tensorflow as tf
 
@@ -21,7 +14,7 @@ class Flower_Dataset:
 
     classes = [] # in alphabetical order? todo
     classes_count = 0
-    examples_count = 0
+    source_examples_count = 0
 
     train_examples = {"index": 0,
                       "count": None,
@@ -45,8 +38,8 @@ class Flower_Dataset:
         print("getting paths")
         for (dirpath, dirnames, filenames) in walk(self.data_dir):
             paths += map(lambda a: dirpath + "/" + a, filenames)
-        self.examples_count = len(paths)
-        if self.examples_count == 0:
+        self.source_examples_count = len(paths)
+        if self.source_examples_count == 0:
             print("incorrect dataset path")
             exit()
         # only use forward slashes
@@ -65,11 +58,10 @@ class Flower_Dataset:
 
         # divide up paths between training and testing
         print("making train and test sets")
-        self.train_examples["count"] = int(self.train_ratio * self.examples_count)
-        self.test_examples["count"] = self.examples_count - self.train_examples["count"]
-        for path in paths[:self.train_examples["count"]]:
+        train_examples_count = int(self.train_ratio * self.source_examples_count)
+        for path in paths[:train_examples_count]:
             self.train_examples["example_info"].append({"path": path, "augmentation_functions": []})
-        for path in paths[self.train_examples["count"]:]:
+        for path in paths[train_examples_count:]:
             self.test_examples["example_info"].append({"path": path, "augmentation_functions": []})
 
         print("record augmentations")
@@ -79,6 +71,10 @@ class Flower_Dataset:
                 e["augmentation_functions"].append(augmentation_function)
             self.train_examples["example_info"] += a
 
+        # record augmented amount
+        self.train_examples["count"] = len(self.train_examples["example_info"])
+        self.test_examples["count"] = len(self.test_examples["example_info"])
+
         print("shuffling")
         shuffle(self.train_examples["example_info"])
         print("finished initializing dataset")
@@ -86,7 +82,6 @@ class Flower_Dataset:
     def get_next_batch(self,
                        data_stream, # self.train_examples or self.test_examples
                        examples):   # number of examples in the batch
-        print("getting next batch")
         batch_examples = {'examples': [], 'labels': []}
         diff = (data_stream["index"] + examples) - data_stream["count"]
         if diff <= 0:
@@ -94,30 +89,22 @@ class Flower_Dataset:
         else:
             indexes_to_use = list(range(data_stream["index"], data_stream["count"])) + list(range(diff))
         for example_index in indexes_to_use:
-            try:
-                # print("reading")
-                im = tf.read_file(data_stream["example_info"][example_index]["path"])
+            example_path = data_stream["example_info"][example_index]["path"]
+            if "23mosaicvirus4" not in example_path: # this file is BROKE
+                im = tf.read_file(example_path)
                 # do not use the generalized function tf.image.decode_images. It
                 # does not return a tensor with a shape, which is needed for tf.image.resize_images
                 im = tf.cond(tf.image.is_jpeg(im),
                     lambda: tf.image.decode_jpeg(im, channels=3),
                     lambda: tf.image.decode_png(im, channels=3))
-                # print("cropping to square")
-                # im = tf.image.central_crop(im, central_fraction=1)
-                # print("resizing")
-                im = tf.image.resize_images(im, (self.size[0], self.size[1]), preserve_aspect_ratio=True)
-                # print("augmenting")
+                im = tf.image.central_crop(im, central_fraction=1)
+                im = tf.image.resize_images(im, (self.size[0], self.size[1]))
                 for augmentation_function in data_stream["example_info"][example_index]["augmentation_functions"]:
                     im = augmentation_function(im)
-                batch_examples['examples'].append(im)
+                batch_examples['examples'].append(im/255)
                 label = self.get_intermediate_directories(data_stream["example_info"][example_index]["path"])
                 batch_examples['labels'].append(self.classes.index(label))
-            except Exception as e:
-                print(e)
-                print("unreadable example: " + data_stream["example_info"][example_index]["path"])
-        # tf.per_image_standardization
         data_stream["index"] = example_index+1
-        print("got batch")
         return batch_examples
 
     def get_intermediate_directories(self, path):
