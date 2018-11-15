@@ -9,18 +9,24 @@ import tensorflow as tf
 import numpy as np
 from flower_dataset import Flower_Dataset
 
-batch_size = 200
 epochs = 20
-log_level = 2
-
+dataset_dir = "C:/datasets/plant_disease/"
 ''' possible directories
-dataset = Flower_Dataset("F:/programming/bina/plant_disease/",
-dataset = Flower_Dataset("G:/programming/bina/plant_disease/",
-dataset = Flower_Dataset("I:/Rahnemoonfar group/Datasets/plant_disease/",
+dataset_dir = "F:/programming/bina/plant_disease/"
+dataset_dir = "G:/programming/bina/plant_disease/"
+dataset_dir = "I:/Rahnemoonfar group/Datasets/plant_disease/"
 '''
-dataset = Flower_Dataset("C:/datasets/plant_disease/",
-                         .7,
-                         [tf.image.flip_left_right])
+batch_size = 200
+image_size = (128, 128)
+log_level = 2
+train_ratio = .7
+augmentation_functions = [tf.image.flip_left_right]
+
+dataset = Flower_Dataset(dataset_dir=dataset_dir,
+                         batch_size=batch_size,
+                         image_size=image_size,
+                         train_ratio=train_ratio,
+                         augmentation_functions=augmentation_functions)
 
 x = tf.placeholder('float', [None, dataset.size[0], dataset.size[1], 3])
 y = tf.placeholder('int64', [None])
@@ -64,7 +70,7 @@ with tf.Session() as sess:
         print("EPOCH: ", epoch+1, "/", epochs)
         for step in range(steps):
             print("reading batch...", end='\n')
-            data = dataset.get_next_batch(dataset.train_examples, batch_size)
+            data = dataset.get_next_batch('train')
             y_data = data['labels']
             x_data = sess.run(data['examples'])
             x_data = np.stack(x_data)
@@ -76,7 +82,7 @@ with tf.Session() as sess:
     correct_c = 0
     test_steps = int(dataset.test_examples["count"]/batch_size)
     for test_steps in range(test_steps):
-        data = dataset.get_next_batch(dataset.test_examples, batch_size)
+        data = dataset.get_next_batch('test')
         x_data, y_data = data['examples'], data['labels']
         correct = sess.run(tf.count_nonzero(tf.equal(tf.argmax(net, 1), y)),
                             feed_dict = {x: x_data, y: y_data})
