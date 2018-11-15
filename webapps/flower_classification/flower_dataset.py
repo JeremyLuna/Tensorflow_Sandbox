@@ -1,5 +1,6 @@
 '''
 TODO:
+    save as uint8? then convert and normalize after read?
     "23mosaicvirus4.jpeg" this file is BROKE
     no overloading?
     how to automate size parameter
@@ -109,20 +110,20 @@ class Flower_Dataset:
         train_batches_count = int(self.dataset_config['train_examples_count']/batch_size)
         self.dataset_config['batches_count']['train'] = train_batches_count
         for batch_number in range(train_batches_count):
-            batch = self.get_next_batch(train_examples, batch_size)
-            np.save(self.dataset_config['np_dataset_dir']+"train_images_"+batch_number+".npy",batch['examples'], allow_pickle=True)
-            np.save(self.dataset_config['np_dataset_dir']+"train_labels_"+batch_number+".npy",batch['labels'], allow_pickle=True)
+            batch = self.generate_next_batch(train_examples, batch_size)
+            np.save(self.dataset_config['np_dataset_dir']+"/train_images_"+str(batch_number)+".npy", batch['examples'], allow_pickle=True)
+            np.save(self.dataset_config['np_dataset_dir']+"/train_labels_"+str(batch_number)+".npy", batch['labels'], allow_pickle=True)
         test_batches_count = int(self.dataset_config['test_examples_count']/batch_size)
         self.dataset_config['batches_count']['test'] = test_batches_count
         for batch_number in range(test_batches_count):
-            batch = self.get_next_batch(test_examples, batch_size)
-            np.save(self.dataset_config['np_dataset_dir']+"test_images_"+batch_number+".npy",batch['examples'], allow_pickle=True)
-            np.save(self.dataset_config['np_dataset_dir']+"test_labels_"+batch_number+".npy",batch['labels'], allow_pickle=True)
+            batch = self.generate_next_batch(test_examples, batch_size)
+            np.save(self.dataset_config['np_dataset_dir']+"/test_images_"+str(batch_number)+".npy", batch['examples'], allow_pickle=True)
+            np.save(self.dataset_config['np_dataset_dir']+"/test_labels_"+str(batch_number)+".npy", batch['labels'], allow_pickle=True)
 
         pickle.dump(self.dataset_config, open(np_dataset_dir + "/dataset_config.pkl", 'wb'))
         print('finished initializing dataset')
 
-    def get_next_batch(self,
+    def generate_next_batch(self,
                        data_stream, # self.train_examples or self.test_examples
                        examples):   # number of examples in the batch
         batch_examples = {'examples': [], 'labels': []}
@@ -147,7 +148,7 @@ class Flower_Dataset:
             batch_examples['examples'].append(im/255)
             label = self.get_intermediate_directories(data_stream["example_info"][example_index]["path"])
             batch_examples['labels'].append(self.dataset_config['classes'].index(label))
-            # np.stack(sess.run())
+        batch_examples['examples'] = np.stack(tf.Session().run(batch_examples['examples']))
         data_stream["index"] = example_index+1
         return batch_examples
 

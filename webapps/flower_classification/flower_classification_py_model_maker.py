@@ -10,11 +10,11 @@ import numpy as np
 from flower_dataset import Flower_Dataset
 
 epochs = 20
-dataset_dir = "C:/datasets/plant_disease/"
+dataset_dir = "I:/Rahnemoonfar group/Datasets/plant_disease/"
 ''' possible directories
+dataset_dir = "C:/datasets/plant_disease/"
 dataset_dir = "F:/programming/bina/plant_disease/"
 dataset_dir = "G:/programming/bina/plant_disease/"
-dataset_dir = "I:/Rahnemoonfar group/Datasets/plant_disease/"
 '''
 batch_size = 200
 image_size = (128, 128)
