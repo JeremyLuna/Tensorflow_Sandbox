@@ -8,7 +8,6 @@
 import tensorflow as tf
 import numpy as np
 from flower_dataset import Flower_Dataset
-from scipy import misc
 
 batch_size = 100
 epochs = 20
@@ -16,11 +15,11 @@ log_level = 2
 '''
 dataset = Flower_Dataset("F:/programming/bina/plant_disease/",
 dataset = Flower_Dataset("G:/programming/bina/plant_disease/",
-dataset = Flower_Dataset("C:/datasets/plant_disease/",
-'''
 dataset = Flower_Dataset("I:/Rahnemoonfar group/Datasets/plant_disease/",
+'''
+dataset = Flower_Dataset("C:/datasets/plant_disease/",
                          .7,
-                         [np.fliplr])
+                         [tf.image.flip_left_right])
 
 x = tf.placeholder('float', [None, dataset.size[0], dataset.size[1], 3])
 y = tf.placeholder('int64', [None])

@@ -95,14 +95,18 @@ class Flower_Dataset:
             indexes_to_use = list(range(data_stream["index"], data_stream["count"])) + list(range(diff))
         for example_index in indexes_to_use:
             try:
-                print("reading")
-                # im = misc.imread(data_stream["example_info"][example_index]["path"], mode='RGB')
-                im = tf.image.decode_image(data_stream["example_info"][example_index]["path"], channels=3, dtype=tf.float32)
-                print(im)
-                input()
-                print("resizing")
-                im = resize(im/255, self.size) # TODO use tf.image.crop_and_resize
-                print("augmenting")
+                # print("reading")
+                im = tf.read_file(data_stream["example_info"][example_index]["path"])
+                # do not use the generalized function tf.image.decode_images. It
+                # does not return a tensor with a shape, which is needed for tf.image.resize_images
+                im = tf.cond(tf.image.is_jpeg(im),
+                    lambda: tf.image.decode_jpeg(im, channels=3),
+                    lambda: tf.image.decode_png(im, channels=3))
+                # print("cropping to square")
+                # im = tf.image.central_crop(im, central_fraction=1)
+                # print("resizing")
+                im = tf.image.resize_images(im, (self.size[0], self.size[1]), preserve_aspect_ratio=True)
+                # print("augmenting")
                 for augmentation_function in data_stream["example_info"][example_index]["augmentation_functions"]:
                     im = augmentation_function(im)
                 batch_examples['examples'].append(im)
@@ -111,6 +115,7 @@ class Flower_Dataset:
             except Exception as e:
                 print(e)
                 print("unreadable example: " + data_stream["example_info"][example_index]["path"])
+        # tf.per_image_standardization
         data_stream["index"] = example_index+1
         print("got batch")
         return batch_examples
