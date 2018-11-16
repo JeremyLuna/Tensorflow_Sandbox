@@ -39,7 +39,7 @@ class Flower_Dataset:
                  augmentation_functions):
 
         print("configuring dataset")
-        self.dataset_config = {"dataset_dir": dataset_dir,
+        self.dataset_config = {"dataset_dir": os.path.normpath(dataset_dir),
             "batch_size": batch_size,
             "image_size": image_size,
             "train_ratio": train_ratio,
@@ -55,12 +55,12 @@ class Flower_Dataset:
         # get list of all image file paths
         paths = []
         for (dirpath, dirnames, filenames) in walk(dataset_dir):
-            paths += map(lambda a: dirpath + "/" + a, filenames)
+            paths += map(lambda a: dirpath + "\\" + a, filenames)
         self.dataset_config['source_examples_count'] = len(paths)
         if self.dataset_config['source_examples_count'] == 0:
             print("incorrect dataset path")
             exit()
-        # only use forward slashes
+        # only use double-backslashes
         paths = list(map(os.path.normpath, paths))
         # returns ["a/s/d/f"] from ["dataset_dir/a/s/d/f/img.png"]
         self.dataset_config["classes"] = list(set(map(lambda p: self.get_intermediate_directories(p), paths)))
@@ -95,32 +95,39 @@ class Flower_Dataset:
         self.dataset_config['test_examples_count'] = test_examples['count']
         shuffle(train_examples["example_info"])
 
-        # check if dataset is made
-        up = os.path.dirname
-        self.dataset_config['np_dataset_dir'] = up(os.path.normpath(dataset_dir)) + "/serialized"
-        np_dataset_dir = self.dataset_config['np_dataset_dir']
-        try:
-            if pickle.load(open(np_dataset_dir + "/dataset_config.pkl", 'rb')) == self.dataset_config:
-                print('serialized dataset found')
-                return
-        except:
-            pass
-
-        print('serializing dataset')
         train_batches_count = int(self.dataset_config['train_examples_count']/batch_size)
         self.dataset_config['batches_count']['train'] = train_batches_count
-        for batch_number in range(train_batches_count):
-            batch = self.generate_next_batch(train_examples, batch_size)
-            np.save(self.dataset_config['np_dataset_dir']+"/train_images_"+str(batch_number)+".npy", batch['examples'], allow_pickle=True)
-            np.save(self.dataset_config['np_dataset_dir']+"/train_labels_"+str(batch_number)+".npy", batch['labels'], allow_pickle=True)
         test_batches_count = int(self.dataset_config['test_examples_count']/batch_size)
         self.dataset_config['batches_count']['test'] = test_batches_count
-        for batch_number in range(test_batches_count):
-            batch = self.generate_next_batch(test_examples, batch_size)
-            np.save(self.dataset_config['np_dataset_dir']+"/test_images_"+str(batch_number)+".npy", batch['examples'], allow_pickle=True)
-            np.save(self.dataset_config['np_dataset_dir']+"/test_labels_"+str(batch_number)+".npy", batch['labels'], allow_pickle=True)
 
-        pickle.dump(self.dataset_config, open(np_dataset_dir + "/dataset_config.pkl", 'wb'))
+        # check if dataset is made
+        print(self.dataset_config)
+        up = os.path.dirname
+        self.dataset_config['np_dataset_dir'] = up(os.path.normpath(dataset_dir)) + "\\serialized"
+        np_dataset_dir = self.dataset_config['np_dataset_dir']
+        try:
+            written_config = pickle.load(open(np_dataset_dir + "\\dataset_config.pkl", 'rb'))
+            if written_config == self.dataset_config:
+                print('serialized dataset found')
+                print('finished initializing dataset')
+                return
+        except:
+            tf.gfile.MkDir(np_dataset_dir)
+
+        print('serializing dataset')
+        
+        for batch_number in range(train_batches_count):
+            print('training batch ' + str(batch_number+1) + '/' + str(train_batches_count))
+            batch = self.generate_next_batch(train_examples, batch_size)
+            np.save(self.dataset_config['np_dataset_dir']+"\\train_images_"+str(batch_number)+".npy", batch['examples'], allow_pickle=True)
+            np.save(self.dataset_config['np_dataset_dir']+"\\train_labels_"+str(batch_number)+".npy", batch['labels'], allow_pickle=True)
+        for batch_number in range(test_batches_count):
+            print('testing batch ' + str(batch_number) + '/' + str(test_batches_count))
+            batch = self.generate_next_batch(test_examples, batch_size)
+            np.save(self.dataset_config['np_dataset_dir']+"\\test_images_"+str(batch_number)+".npy", batch['examples'], allow_pickle=True)
+            np.save(self.dataset_config['np_dataset_dir']+"\\test_labels_"+str(batch_number)+".npy", batch['labels'], allow_pickle=True)
+
+        pickle.dump(self.dataset_config, open(np_dataset_dir + "\\dataset_config.pkl", 'wb'))
         print('finished initializing dataset')
 
     def generate_next_batch(self,
@@ -153,12 +160,12 @@ class Flower_Dataset:
         return batch_examples
 
     def get_next_batch(self, mode): # mode = "train" | "test"
-        mode = '/'+mode
-        data_dir = self.dataset_config['np_dataset_dir''train_images_'+batch_number+'.npy']
-        x = np.load(data_dir+mode+"_images_"+self.batch_index[mode]+".npy")
-        y = np.load(data_dir+mode+"_labels_"+self.batch_index[mode]+".npy")
+        data_dir = self.dataset_config['np_dataset_dir'] + '\\'
+        x = np.load(data_dir+mode+"_images_"+str(self.batch_index[mode])+".npy")
+        y = np.load(data_dir+mode+"_labels_"+str(self.batch_index[mode])+".npy")
         self.batch_index[mode] += 1
         self.batch_index[mode] %= self.dataset_config['batches_count'][mode]
+        return x, y
 
     def get_intermediate_directories(self, path):
-        return '/'.join(path[len(self.dataset_config['dataset_dir']):].split('/')[:-1])
+        return '\\'.join(path[len(self.dataset_config['dataset_dir']):].split('\\')[:-1])
