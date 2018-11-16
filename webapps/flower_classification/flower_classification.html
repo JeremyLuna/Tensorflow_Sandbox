@@ -4,6 +4,7 @@ layout: default
 
 <!-- TODO: make variable resolution                -->
 <!-- TODO: Is 100x100 not availible on ios phones? -->
+<!-- user upload snippet https://js.tensorflow.org/tutorials/model-save-load.html -->
 
 <body>
 
@@ -23,7 +24,7 @@ layout: default
 
     <script src="webcam.js"></script><script>
         wire_device_control(document.getElementById("audioSource"),
-                            document.getElementById("videoSource"),
+                            document.getElementById("videoSource"), // TODO: change this to user uploaded image as option
                             document.getElementById("webcam"));
     </script>
 

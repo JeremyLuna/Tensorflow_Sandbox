@@ -1,12 +1,10 @@
-// learning from
-// user upload:
-//      tf.io.browserFiles()
+ // learning from
 // saving tf python models:
 //      https://www.tensorflow.org/guide/saved_model#models
 // converting to tf js model:
 //      https://github.com/tensorflow/tfjs-converter
 // loading tf js model
-//      https://js.tensorflow.org/api/0.11.2/#loadModel actually loadFrozenModel
+//      https://js.tensorflow.org/api/0.11.2/#loadModel
 // TODO: video in canvas
 //      https://stackoverflow.com/questions/4429440/html5-display-video-inside-canvas
 //      http://html5doctor.com/video-canvas-magic/
