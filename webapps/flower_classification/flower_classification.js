@@ -1,6 +1,10 @@
 // learning from
 // user upload:
+//      https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input/file
 //      tf.io.browserFiles()
+//      https://js.tensorflow.org/api/0.13.3/#loadModel
+//      https://simpl.info/getusermedia/sources/
+//      https://js.tensorflow.org/tutorials/model-save-load.html
 // saving tf python models:
 //      https://www.tensorflow.org/guide/saved_model#models
 // converting to tf js model:

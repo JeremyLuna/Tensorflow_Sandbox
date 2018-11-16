@@ -1,7 +1,3 @@
-// learning from:
-//     user choice camera:
-//         https://simpl.info/getusermedia/sources/
-
 /*
 Copyright 2017 Google Inc.
 Licensed under the Apache License, Version 2.0 (the "License");
