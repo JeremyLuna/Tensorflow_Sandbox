@@ -7,12 +7,12 @@
 
 import tensorflow as tf
 import numpy as np
-from Image_Classification_Dataset import Image_Classification_Dataset
+from flower_dataset import Flower_Dataset
 
 epochs = 50
-dataset_dir = "I:/Rahnemoonfar group/Datasets/plant_disease/"
-''' possible directories
 dataset_dir = "C:/datasets/plant_disease/"
+''' possible directories
+dataset_dir = "I:/Rahnemoonfar group/Datasets/plant_disease/"
 dataset_dir = "F:/programming/bina/plant_disease/"
 dataset_dir = "G:/programming/bina/plant_disease/"
 '''
@@ -22,7 +22,7 @@ log_level = 2
 train_ratio = .7
 augmentation_functions = [tf.image.flip_left_right]
 
-dataset = Image_Classification_Dataset(dataset_dir=dataset_dir,
+dataset = Flower_Dataset(dataset_dir=dataset_dir,
                          batch_size=batch_size,
                          image_size=image_size,
                          train_ratio=train_ratio,
