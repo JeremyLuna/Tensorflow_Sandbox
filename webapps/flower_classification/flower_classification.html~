@@ -11,11 +11,11 @@ layout: default
     <h1> Choose Classifier Input </h1> <br/>
 
     
-    <form action="camera/flower_classifier_camera.html">
+    <form action="camera/main.html">
       <button type="submit">Camera Feed</button>
     </form>
 
-    <form action="upload/flower_classifier_upload.html">
+    <form action="upload/main.html">
       <button type="submit">Upload</button>
     </form>
 
