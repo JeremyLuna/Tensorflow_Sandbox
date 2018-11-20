@@ -2,33 +2,20 @@
 layout: default
 ---
 
-<!-- TODO: make variable resolution                -->
-<!-- TODO: Is 100x100 not availible on ios phones? -->
+<!-- http://www.onlywebpro.com/2012/01/24/create-thumbnail-preview-of-images-using-html5-api/ -->
 
 <body>
 
-
     <h1> Identify Flower Diseases </h1> <br/>
-
-    <p> Aim the camera at a flower. </p>
-
-    <label for="audioSource">Audio source: </label><select id="audioSource"></select> <br/>
-    <label for="videoSource">Video source: </label><select id="videoSource"></select> <br/>
 
     <h2 id="disease">Loading...</h2> <br/>
 
-    <center>
-        <video muted autoplay controls id="webcam" width="128" height="128" style="width:300px;height:300px;"></video>
-    </center>
-
-    <script src="webcam.js"></script><script>
-        wire_device_control(document.getElementById("audioSource"),
-                            document.getElementById("videoSource"), // TODO: change this to user uploaded image as option
-                            document.getElementById("webcam"));
-    </script>
+    <input type="file"
+	   id="input_image" name="input_image"
+	   accept="image/*">
 
     <!-- Load TensorFlow.js -->
     <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@0.12.5"> </script>
-    <script src="flower_classification.js"></script>
+    <script src="flower_classification_upload.js"></script>
 
 </body>
