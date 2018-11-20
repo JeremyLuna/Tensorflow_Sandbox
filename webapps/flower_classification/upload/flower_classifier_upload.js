@@ -19,7 +19,9 @@ function calc_disease(){
     // Reads the image as a Tensor from the file
     preprocessor = tf.fromPixels(document.getElementById('input_image')).asType('float32');
     // TODO: crop middle square
-    // TODO: resize to whatever the network takes
+    console.log(preprocessor.shape);
+    // resize to whatever the network takes
+    preprocessor = tf.image.resizeBilinear(preprocessor, [100, 100])
     preprocessor = tf.div(preprocessor, 255);
     preprocessor = tf.expandDims(preprocessor, 0);
     output = model.predict(preprocessor);
@@ -38,7 +40,7 @@ function handleFileSelect(evt) {
       document.getElementById('image_display').innerHTML = ['<img src="', e.target.result,
                                                             '" title="', theFile.name,
                                                             '"id=input_image />'].join('');
-      calc_disease();
+      setTimeout(calc_disease,100);
     };
   })(f);
   url_reader.readAsDataURL(f);
