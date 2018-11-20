@@ -1,11 +1,3 @@
-// learning from
-// user upload:
-//      https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input/file
-//      tf.io.browserFiles()
-//      https://js.tensorflow.org/api/0.13.3/#loadModel
-//      https://simpl.info/getusermedia/sources/
-//      https://js.tensorflow.org/tutorials/model-save-load.html
-
 let model;
 let source_image;
 let interval_id;
@@ -25,38 +17,38 @@ async function setup(){
 
 function calc_disease(){
     // Reads the image as a Tensor from the file
-    // preprocessor = tf.fromPixels(video).asType('float32');
-    // preprocessor = tf.div(preprocessor, 255);
-    // preprocessor = tf.expandDims(preprocessor, 0);
-    // output = model.predict(preprocessor);
-    // output = tf.argMax(output, 1);
-    // output = classes[output.get([0])];
-    // document.getElementById("disease").innerHTML = "Disease: " + output;
+    preprocessor = tf.fromPixels(document.getElementById('input_image')).asType('float32');
+    // TODO: crop middle square
+    // TODO: resize to whatever the network takes
+    preprocessor = tf.div(preprocessor, 255);
+    preprocessor = tf.expandDims(preprocessor, 0);
+    output = model.predict(preprocessor);
+    output = tf.argMax(output, 1);
+    output = classes[output.get([0])];
+    document.getElementById("disease").innerHTML = "Disease: " + output;
 }
 
 function handleFileSelect(evt) {
   var files = evt.target.files;
   var f = files[0];
+
   var url_reader = new FileReader();
   url_reader.onload = (function(theFile) {
     return function(e) {
-      document.getElementById('image_display').innerHTML = ['<img src="', e.target.result,'" title="', theFile.name, '" width="50" />'].join('');
+      document.getElementById('image_display').innerHTML = ['<img src="', e.target.result,
+                                                            '" title="', theFile.name,
+                                                            '"id=input_image />'].join('');
+      calc_disease();
     };
   })(f);
-  reader.readAsDataURL(f);
-
-  var array_reader = new FileReader();
-  array_reader.readAsArrayBuffer(f);
-  source_image = array_reader.result;
+  url_reader.readAsDataURL(f);
 }
 
 function update(evt){
   handleFileSelect(evt);
-  calc_disease();
-  console.log(source_image);
 }
 
 setup();
-document.getElementById('input_image').addEventListener('change', update, false);
+document.getElementById('input_image_file').addEventListener('change', update, false);
 
 // interval_id = setInterval(calc_disease, 1000);
