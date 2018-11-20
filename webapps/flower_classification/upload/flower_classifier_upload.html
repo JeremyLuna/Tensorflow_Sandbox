@@ -8,14 +8,22 @@ layout: default
 
     <h1> Identify Flower Diseases </h1> <br/>
 
-    <h2 id="disease">Loading...</h2> <br/>
-
     <input type="file"
 	   id="input_image" name="input_image"
 	   accept="image/*">
 
+    <h2 id="disease">Loading...</h2> <br/>
+
+    <output id="image_display"></output>
+
+
+    <!-- check if they can upload a file -->
+    <script type="text/javascript">
+      if (!window.FileReader) {alert('This browser does not support FileReader');}
+    </script>
+
     <!-- Load TensorFlow.js -->
     <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@0.12.5"> </script>
-    <script src="flower_classification_upload.js"></script>
+    <script src="flower_classifier_upload.js"></script>
 
 </body>
