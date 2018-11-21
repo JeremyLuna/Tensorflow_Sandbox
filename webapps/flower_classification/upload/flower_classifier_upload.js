@@ -18,8 +18,15 @@ async function setup(){
 function calc_disease(){
     // Reads the image as a Tensor from the file
     preprocessor = tf.fromPixels(document.getElementById('input_image')).asType('float32');
-    // TODO: crop middle square
-    console.log(preprocessor.shape);
+    // crop middle square
+    shape = preprocessor.shape
+    diff = shape[0] - shape[1]
+    start = Math.abs(Math.floor(diff/2))
+    if (shape[0] > shape[1]){
+      preprocessor = tf.slice(preprocessor, [start, 0, 0], [shape[1], shape[1], 3])
+    } else {
+      preprocessor = tf.slice(preprocessor, [0, start, 0], [shape[0], shape[0], 3])
+    }
     // resize to whatever the network takes
     preprocessor = tf.image.resizeBilinear(preprocessor, [100, 100])
     preprocessor = tf.div(preprocessor, 255);
