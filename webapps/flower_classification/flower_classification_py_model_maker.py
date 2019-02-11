@@ -1,15 +1,15 @@
-# saves an mnist model in the form "SavedModel"
-# converted previously using the command:
+# change batch size to 1 to find problematic images
+# this program saves an mnist model in the form "SavedModel"
+# after model is made, run this command:
 # tensorflowjs_converter --input_format=tf_saved_model --output_node_names="net_out/BiasAdd" py_model_saves js_model_saves
 # use python -m cProfile .\flower_classification_py_model_maker.py to profile
 
-# 38.64% accuracy
+# latest model had 38.64% accuracy
 
 import tensorflow as tf
 import numpy as np
 from Image_Classification_Dataset import Image_Classification_Dataset
 
-epochs = 50
 dataset_dir = "I:/Rahnemoonfar group/Datasets/plant_disease/"
 ''' possible directories
 dataset_dir = "C:/datasets/plant_disease/"
@@ -18,15 +18,17 @@ dataset_dir = "G:/programming/bina/plant_disease/"
 '''
 batch_size = 200
 image_size = (128, 128)
-log_level = 2
 train_ratio = .7
 augmentation_functions = [tf.image.flip_left_right]
+epochs = 50
+log_level = 2
 
-dataset = Image_Classification_Dataset(dataset_dir=dataset_dir,
-                         batch_size=batch_size,
-                         image_size=image_size,
-                         train_ratio=train_ratio,
-                         augmentation_functions=augmentation_functions)
+dataset = Image_Classification_Dataset(
+                        dataset_dir=dataset_dir,
+                        batch_size=batch_size,
+                        image_size=image_size,
+                        train_ratio=train_ratio,
+                        augmentation_functions=augmentation_functions)
 
 x = tf.placeholder('float', [None, image_size[0], image_size[1], 3])
 y = tf.placeholder('int64', [None])
@@ -62,7 +64,7 @@ with tf.name_scope('OPTIMIZATION'):
 
 
 # train
-print("bout to train")
+print("Starting training session")
 with tf.Session() as sess:
     sess.run(tf.global_variables_initializer())
     train_steps = dataset.dataset_config['batches_count']['train']

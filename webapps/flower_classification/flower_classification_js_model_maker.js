@@ -1,3 +1,8 @@
+// this script is not written yet.
+// this is for running training and creating the model in the browser
+// below is an example with an mnist MODEL
+// much of it needs to be changed in order to work with plant_disease
+
 /**
  * @license
  * Copyright 2018 Google LLC. All Rights Reserved.

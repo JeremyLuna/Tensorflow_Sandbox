@@ -117,7 +117,7 @@ class Image_Classification_Dataset:
             tf.gfile.MkDir(np_dataset_dir)
 
         print('serializing dataset')
-        
+
         for batch_number in range(train_batches_count):
             print('training batch ' + str(batch_number+1) + '/' + str(train_batches_count))
             batch = self.generate_next_batch(train_examples, batch_size)
@@ -144,11 +144,15 @@ class Image_Classification_Dataset:
         for example_index in indexes_to_use:
             example_path = data_stream["example_info"][example_index]["path"]
             im = tf.read_file(example_path)
+            print(example_path)
             # do not use the generalized function tf.image.decode_images. It
             # does not return a tensor with a shape, which is needed for tf.image.resize_images
-            im = tf.cond(tf.image.is_jpeg(im),
-                lambda: tf.image.decode_jpeg(im, channels=3),
-                lambda: tf.image.decode_png(im, channels=3))
+            if example_path.split('.')[-1] is ".jpg":
+                im = tf.image.decode_jpeg(im, channels=3)
+            else:
+                im = tf.cond(tf.image.is_jpeg(im),
+                    lambda: tf.image.decode_jpeg(im, channels=3),
+                    lambda: tf.image.decode_png(im, channels=3))
             im = tf.image.central_crop(im, central_fraction=1)
             image_size = self.dataset_config['image_size']
             im = tf.image.resize_images(im, image_size)
