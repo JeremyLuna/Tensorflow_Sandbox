@@ -144,7 +144,6 @@ class Image_Classification_Dataset:
         for example_index in indexes_to_use:
             example_path = data_stream["example_info"][example_index]["path"]
             im = tf.read_file(example_path)
-            print(example_path)
             # do not use the generalized function tf.image.decode_images. It
             # does not return a tensor with a shape, which is needed for tf.image.resize_images
             if example_path.split('.')[-1] is ".jpg":
