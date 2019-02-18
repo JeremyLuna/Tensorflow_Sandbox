@@ -16,7 +16,7 @@ dataset_dir = "C:/datasets/plant_disease/"
 dataset_dir = "F:/programming/bina/plant_disease/"
 dataset_dir = "G:/programming/bina/plant_disease/"
 '''
-batch_size = 1
+batch_size = 200
 image_size = (128, 128)
 train_ratio = .7
 augmentation_functions = [tf.image.flip_left_right]
