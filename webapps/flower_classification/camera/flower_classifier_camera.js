@@ -24,6 +24,8 @@ async function setup(){
     }
 }
 
+document.getElementById("disease").innerHTML = "Loaded: ";
+
 function calc_disease(){
     // Reads the image as a Tensor from the webcam <video> element.
     preprocessor = tf.fromPixels(video).asType('float32');
