@@ -20,7 +20,7 @@ batch_size = 200
 image_size = (128, 128)
 train_ratio = .7
 augmentation_functions = [tf.image.flip_left_right]
-epochs = 50
+epochs = 0 # 50
 log_level = 2
 
 dataset = Image_Classification_Dataset(
