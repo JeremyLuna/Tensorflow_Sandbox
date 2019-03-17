@@ -1,4 +1,5 @@
 # reference:
+#     Use this methodology then convert, https://hackernoon.com/creating-insanely-fast-image-classifiers-with-mobilenet-in-tensorflow-f030ce0a2991
 #     https://github.com/tensorflow/models/blob/master/research/slim/nets/mobilenet_v1.md
 #     https://github.com/Zehaos/MobileNet
 #     https://www.tensorflow.org/js/tutorials/conversion/import_saved_model
