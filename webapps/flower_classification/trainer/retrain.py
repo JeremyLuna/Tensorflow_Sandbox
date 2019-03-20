@@ -15,6 +15,45 @@
 # NOTICE: This work was derived from tensorflow/examples/image_retraining
 # and modified to use TensorFlow Hub modules.
 
+# tested works with the following environment:
+    # Package              Version
+    # -------------------- -------
+    # absl-py              0.5.0
+    # astor                0.7.1
+    # cloudpickle          0.5.6
+    # dask                 0.19.2
+    # decorator            4.3.0
+    # gast                 0.2.0
+    # grpcio               1.15.0
+    # h5py                 2.8.0
+    # Keras                2.1.6
+    # Keras-Applications   1.0.6
+    # Keras-Preprocessing  1.0.5
+    # Markdown             3.0.1
+    # mock                 2.0.0
+    # networkx             2.2
+    # numpy                1.14.1
+    # pbr                  5.1.3
+    # Pillow               5.2.0
+    # pip                  10.0.1
+    # protobuf             3.6.1
+    # PyWavelets           1.0.1
+    # PyYAML               3.13
+    # scikit-image         0.14.0
+    # scipy                1.1.0
+    # setuptools           39.0.1
+    # six                  1.11.0
+    # tensorboard          1.12.2
+    # tensorflow           1.12.0
+    # tensorflow-estimator 1.13.0
+    # tensorflow-hub       0.1.0
+    # tensorflowjs         0.5.7
+    # termcolor            1.1.0
+    # toolz                0.9.0
+    # Werkzeug             0.14.1
+    # wheel                0.31.1
+    # You are using pip version 10.0.1,
+
 # pylint: disable=line-too-long
 r"""Simple transfer learning with image modules from TensorFlow Hub.
 
