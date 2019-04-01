@@ -36,12 +36,14 @@ var chart = new CanvasJS.Chart("chartContainer", {
 	},
 	axisX:{
 		interval: 1,
+    labelFontSize: 11,
     labelWrap: false
 	},
 	axisY2:{
 		interlacedColor: "rgba(1,77,101,.2)",
 		gridColor: "rgba(1,77,101,.1)",
-		title: "Confidence"
+		title: "Confidence",
+    labelFontSize: 11
 	},
 	data: [{
 		type: "bar",
