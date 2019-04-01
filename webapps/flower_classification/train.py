@@ -1,17 +1,13 @@
 # reference:
-#     Use this methodology then convert:
+#     program uses this methodology then converts model:
 #       (new guide) https://www.tensorflow.org/hub/tutorials/image_retraining
 #       (old guide) https://hackernoon.com/creating-insanely-fast-image-classifiers-with-mobilenet-in-tensorflow-f030ce0a2991
-#     https://github.com/tensorflow/models/blob/master/research/slim/nets/mobilenet_v1.md
-#     https://github.com/Zehaos/MobileNet
-#     https://www.tensorflow.org/js/tutorials/conversion/import_saved_model
-#     https://codelabs.developers.google.com/codelabs/tensorflowjs-teachablemachine-codelab/index.html
-# model can be (is not) taken from
-#     tensorflowjs_converter --input_format=tf_hub 'https://tfhub.dev/google/imagenet/mobilenet_v1_100_224/classification/1' ./mobilenet/web_model
+# this can be used to view node names from console (or you can use tensorboard)
+#   [print(n.name) for n in tf.get_default_graph().as_graph_def().node]
 
 import os
 
-image_dir = "C:/Users/jluna10/Desktop/plant_disease"
+image_dir = "D:/plant_disease"
 ''' possible directories
 image_dir = "I:/Rahnemoonfar group/Datasets/plant_disease/"
 image_dir = "F:/programming/bina/plant_disease/"
@@ -66,3 +62,5 @@ os.system("python trainer/retrain.py"
     + " --tfhub_module " + tfhub_module
     + " --saved_model_dir " + saved_model_dir
     + " --logging_verbosity " + logging_verbosity)
+
+os.system("tensorflowjs_converter --input_format=tf_saved_model --output_node_names="net_out/BiasAdd" py_model_saves js_model_saves")
