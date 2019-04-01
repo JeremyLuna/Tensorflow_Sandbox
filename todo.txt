@@ -1,4 +1,5 @@
-can it accept images of any size?
-do I need to normalize input?
-get working on iPhones
+Does it work on iPhones?
 maybe train longer
+show confidence levels
+  https://canvasjs.com/html5-javascript-bar-chart/
+  https://canvasjs.com/javascript-charts/stacked-column-100-chart/
