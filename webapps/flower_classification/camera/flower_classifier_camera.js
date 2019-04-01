@@ -75,7 +75,7 @@ function calc_disease(){
     output = classes[output.get([0])];
     document.getElementById("disease").innerHTML = "Disease: " + output;
     for (let i=0; i < logits.length; i++){
-      chart.options.data[0].dataPoints[i].y = logits.dataSync()[i]);
+      chart.options.data[0].dataPoints[i].y = logits.dataSync()[i];
     }
     console.log(logits.dataSync());
     chart.render();
