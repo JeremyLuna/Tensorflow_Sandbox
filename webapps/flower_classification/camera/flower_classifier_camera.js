@@ -32,12 +32,11 @@ async function setup(){
         model_dir = "tensorflowjs_model.pb";
         weights_dir = "weights_manifest.json";
         model = await tf.loadFrozenModel(storage_dir+model_dir, storage_dir+weights_dir);
+        document.getElementById("disease").innerHTML = "Model Loaded";
     } catch (err) {
         console.log("Error: ", err);
     }
 }
-
-document.getElementById("disease").innerHTML = "Model Loaded";
 
 function calc_disease(){
     // Reads the image as a Tensor from the webcam <video> element.
