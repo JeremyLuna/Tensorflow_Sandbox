@@ -1,5 +1,3 @@
-don't hard code labels. pull them from trained_model/output_labels
-  https://stackoverflow.com/questions/36921947/read-a-server-side-file-using-javascript
 can it accept images of any size?
 get working on iPhones
 maybe train longer

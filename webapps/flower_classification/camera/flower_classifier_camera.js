@@ -22,9 +22,8 @@ function loadFile(filePath) {
 
 let model;
 let interval_id;
-// var classes = ['anthracnose', 'aphids', 'black _spot', 'botrytis_blight', 'cercospora', 'crown_gall', 'downy_mildew', 'healthy', 'leaf_cutting_bee', 'mosaic', 'powdery_mildew', 'rose_chafer', 'rose_rosette', 'rust', 'stem_cankers', 'thrips', 'two-spotted_mite'];
 var classes = loadFile("https://jeremyluna.github.io/Tensorflow_Sandbox/webapps/flower_classification/trained_model/output_labels");
-console.log(typeof classes);
+classes = classes.split("\n");
 
 async function setup(){
     try {
