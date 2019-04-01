@@ -9,12 +9,26 @@
 // stream from camera
 const video = document.getElementById("webcam");
 
-model = "temp";
+function loadFile(filePath) {
+  var result = null;
+  var xmlhttp = new XMLHttpRequest();
+  xmlhttp.open("GET", filePath, false);
+  xmlhttp.send();
+  if (xmlhttp.status==200) {
+    result = xmlhttp.responseText;
+  }
+  return result;
+}
+
+let model;
 let interval_id;
-var classes = ['anthracnose', 'aphids', 'black _spot', 'botrytis_blight', 'cercospora', 'crown_gall', 'downy_mildew', 'healthy', 'leaf_cutting_bee', 'mosaic', 'powdery_mildew', 'rose_chafer', 'rose_rosette', 'rust', 'stem_cankers', 'thrips', 'two-spotted_mite'];
+// var classes = ['anthracnose', 'aphids', 'black _spot', 'botrytis_blight', 'cercospora', 'crown_gall', 'downy_mildew', 'healthy', 'leaf_cutting_bee', 'mosaic', 'powdery_mildew', 'rose_chafer', 'rose_rosette', 'rust', 'stem_cankers', 'thrips', 'two-spotted_mite'];
+var classes = loadFile("https://jeremyluna.github.io/Tensorflow_Sandbox/webapps/flower_classification/trained_model/output_labels");
+console.log(classes);
 
 async function setup(){
     try {
+        document.getElementById("disease").innerHTML = "Loading Model ...";
         storage_dir = "https://jeremyluna.github.io/Tensorflow_Sandbox/webapps/flower_classification/mobilenet/web_model/";
         model_dir = "tensorflowjs_model.pb";
         weights_dir = "weights_manifest.json";
@@ -24,7 +38,7 @@ async function setup(){
     }
 }
 
-document.getElementById("disease").innerHTML = "Loaded: ";
+document.getElementById("disease").innerHTML = "Model Loaded";
 
 function calc_disease(){
     // Reads the image as a Tensor from the webcam <video> element.
