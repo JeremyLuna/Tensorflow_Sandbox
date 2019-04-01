@@ -70,10 +70,13 @@ function calc_disease(){
     preprocessor = tf.fromPixels(video).asType('float32');
     preprocessor = tf.div(preprocessor, 255);
     preprocessor = tf.expandDims(preprocessor, 0);
-    output = model.predict(preprocessor);
-    output = tf.argMax(output, 1);
+    logits = model.predict(preprocessor);
+    output = tf.argMax(logits, 1);
     output = classes[output.get([0])];
     document.getElementById("disease").innerHTML = "Disease: " + output;
+    for (let i=0; i < logits.length; i++){
+      chart.options.data[0].dataPoints[i]['y'] = logits[i];
+    }
     chart.render();
 }
 
