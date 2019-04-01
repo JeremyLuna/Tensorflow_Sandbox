@@ -42,7 +42,7 @@ function calc_disease(){
       preprocessor = tf.slice(preprocessor, [0, start, 0], [shape[0], shape[0], 3])
     }
     // resize to whatever the network takes
-    preprocessor = tf.image.resizeBilinear(preprocessor, [100, 100])
+    preprocessor = tf.image.resizeBilinear(preprocessor, [224, 224])
     preprocessor = tf.div(preprocessor, 255);
     preprocessor = tf.expandDims(preprocessor, 0);
     output = model.predict(preprocessor);
