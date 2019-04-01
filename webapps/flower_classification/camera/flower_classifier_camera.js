@@ -26,7 +26,6 @@ var classes = loadFile("https://jeremyluna.github.io/Tensorflow_Sandbox/webapps/
 classes = classes.split("\n");
 classes.pop();
 logit_datapoints = classes.map(function(classe) {return {y: 0, label: classe}});
-console.log(logit_datapoints);
 
 var chart = new CanvasJS.Chart("chartContainer", {
 	animationEnabled: true,
