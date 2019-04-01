@@ -36,7 +36,6 @@ var chart = new CanvasJS.Chart("chartContainer", {
 	},
 	axisX:{
 		interval: 1,
-    labelFontSize: 10,
     labelWrap: false
 	},
 	axisY2:{
