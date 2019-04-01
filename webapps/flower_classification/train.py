@@ -4,6 +4,8 @@
 #       (old guide) https://hackernoon.com/creating-insanely-fast-image-classifiers-with-mobilenet-in-tensorflow-f030ce0a2991
 # this can be used to view node names from console (or you can use tensorboard)
 #   [print(n.name) for n in tf.get_default_graph().as_graph_def().node]
+# for tensorboard: in .../trained_model/ run
+#   tensorboard --logdir .\
 
 import os
 
@@ -63,4 +65,4 @@ os.system("python trainer/retrain.py"
     + " --saved_model_dir " + saved_model_dir
     + " --logging_verbosity " + logging_verbosity)
 
-os.system("tensorflowjs_converter --input_format=tf_saved_model --output_node_names="net_out/BiasAdd" py_model_saves js_model_saves")
+os.system("tensorflowjs_converter --input_format=tf_saved_model --output_node_names=\"final_result\" trained_model/saved_model js_model")
