@@ -70,7 +70,7 @@ function calc_disease(){
     preprocessor = tf.fromPixels(video).asType('float32');
     preprocessor = tf.div(preprocessor, 255);
     preprocessor = tf.expandDims(preprocessor, 0);
-    logits = model.predict(preprocessor);
+    logits = model.predict(preprocessor).data();
     output = tf.argMax(logits, 1);
     output = classes[output.get([0])];
     document.getElementById("disease").innerHTML = "Disease: " + output;
