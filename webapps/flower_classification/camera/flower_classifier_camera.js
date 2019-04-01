@@ -73,7 +73,7 @@ function calc_disease(){
     output = tf.argMax(logits, 1);
     output = classes[output.get([0])];
     document.getElementById("disease").innerHTML = "Disease: " + output;
-    for (let i=0; i < logits.length; i++){
+    for (let i=0; i < chart.options.data[0].dataPoints.length; i++){
       chart.options.data[0].dataPoints[i].y = logits.dataSync()[i];
     }
     chart.render();
