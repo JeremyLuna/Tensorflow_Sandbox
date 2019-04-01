@@ -35,14 +35,14 @@ var chart = new CanvasJS.Chart("chartContainer", {
 		text:"Plant Disease"
 	},
 	axisX:{
-		interval: 1
+		interval: 1,
+    labelFontSize: 10,
+    labelWrap: false
 	},
 	axisY2:{
 		interlacedColor: "rgba(1,77,101,.2)",
 		gridColor: "rgba(1,77,101,.1)",
-		title: "Confidence",
-    labelFontSize: 10,
-    labelWrap: false
+		title: "Confidence"
 	},
 	data: [{
 		type: "bar",
