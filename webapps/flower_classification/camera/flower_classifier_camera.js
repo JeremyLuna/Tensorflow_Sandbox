@@ -24,7 +24,7 @@ let model;
 let interval_id;
 var classes = loadFile("https://jeremyluna.github.io/Tensorflow_Sandbox/webapps/flower_classification/trained_model/output_labels");
 classes = classes.split("\n");
-logit_datapoints = classes.map(class => {y: 0, label: class})
+logit_datapoints = classes.map(classe => {y: 0, label: classe})
 console.log(logit_datapoints);
 
 var chart = new CanvasJS.Chart("chartContainer", {
