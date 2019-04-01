@@ -66,7 +66,7 @@ var chart = new CanvasJS.Chart("chartContainer", {
 		]
 	}]
 });
-chart.render();
+
 
 async function setup(){
     try {
@@ -90,6 +90,7 @@ function calc_disease(){
     output = tf.argMax(output, 1);
     output = classes[output.get([0])];
     document.getElementById("disease").innerHTML = "Disease: " + output;
+    chart.render();
 }
 
 setup();
