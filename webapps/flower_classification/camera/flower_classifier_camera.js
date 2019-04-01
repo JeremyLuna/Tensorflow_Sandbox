@@ -27,6 +27,7 @@ classes = classes.split("\n");
 classes.pop();
 logit_datapoints = classes.map(function(classe) {return {y: 0, label: classe}});
 
+// from https://canvasjs.com/html5-javascript-bar-chart/
 var chart = new CanvasJS.Chart("chartContainer", {
 	animationEnabled: true,
 
@@ -39,8 +40,7 @@ var chart = new CanvasJS.Chart("chartContainer", {
 	axisY2:{
 		interlacedColor: "rgba(1,77,101,.2)",
 		gridColor: "rgba(1,77,101,.1)",
-		title: "Confidence",
-    maximum: 1
+		title: "Confidence"
 	},
 	data: [{
 		type: "bar",
