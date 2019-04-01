@@ -77,7 +77,6 @@ function calc_disease(){
     for (let i=0; i < logits.length; i++){
       chart.options.data[0].dataPoints[i].y = logits.dataSync()[i];
     }
-    console.log(logits.dataSync());
     chart.render();
 }
 
