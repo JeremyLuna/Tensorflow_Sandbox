@@ -40,7 +40,7 @@ var chart = new CanvasJS.Chart("chartContainer", {
 		interlacedColor: "rgba(1,77,101,.2)",
 		gridColor: "rgba(1,77,101,.1)",
 		title: "Confidence",
-    suffix: "%"
+    maximum: 1
 	},
 	data: [{
 		type: "bar",
