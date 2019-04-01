@@ -1,2 +1,3 @@
 Does it work on iPhones?
-maybe train longer
+train longer
+show Confidence for uploaded images?
