@@ -18,7 +18,7 @@ classes = classes.split("\n");
 // load model
 async function setup(){
     try {
-        storage_dir = "https://jeremyluna.github.io/Tensorflow_Sandbox/webapps/flower_classification/js_model_saves/";
+        storage_dir = "https://jeremyluna.github.io/Tensorflow_Sandbox/webapps/flower_classification/js_model/";
         model_dir = "tensorflowjs_model.pb";
         weights_dir = "weights_manifest.json";
         model = await tf.loadFrozenModel(storage_dir+model_dir, storage_dir+weights_dir);
@@ -65,11 +65,5 @@ function handleFileSelect(evt) {
   url_reader.readAsDataURL(f);
 }
 
-function update(evt){
-  handleFileSelect(evt);
-}
-
 setup();
-document.getElementById('input_image_file').addEventListener('change', update, false);
-
-// interval_id = setInterval(calc_disease, 1000);
+document.getElementById('input_image_file').addEventListener('change', handleFileSelect, false);

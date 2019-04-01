@@ -28,7 +28,7 @@ classes = classes.split("\n");
 async function setup(){
     try {
         document.getElementById("disease").innerHTML = "Loading Model ...";
-        storage_dir = "https://jeremyluna.github.io/Tensorflow_Sandbox/webapps/flower_classification/mobilenet/web_model/";
+        storage_dir = "https://jeremyluna.github.io/Tensorflow_Sandbox/webapps/flower_classification/js_model/";
         model_dir = "tensorflowjs_model.pb";
         weights_dir = "weights_manifest.json";
         model = await tf.loadFrozenModel(storage_dir+model_dir, storage_dir+weights_dir);

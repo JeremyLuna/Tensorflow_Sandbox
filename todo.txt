@@ -1,3 +1,4 @@
 can it accept images of any size?
+do I need to normalize input?
 get working on iPhones
 maybe train longer
