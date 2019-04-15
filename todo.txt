@@ -1,3 +1,4 @@
 Does it work on iPhones?
 train longer
 show Confidence for uploaded images?
+show top 3 guesses
