@@ -2,10 +2,13 @@
 #     program uses this methodology then converts model:
 #       (new guide) https://www.tensorflow.org/hub/tutorials/image_retraining
 #       (old guide) https://hackernoon.com/creating-insanely-fast-image-classifiers-with-mobilenet-in-tensorflow-f030ce0a2991
-# this can be used to view node names from console (or you can use tensorboard)
+# this command can be used to view node names from console (or you can use tensorboard)
 #   [print(n.name) for n in tf.get_default_graph().as_graph_def().node]
-# for tensorboard: in .../trained_model/ run
-#   tensorboard --logdir .\
+# for tensorboard:
+#   go to .../trained_model/
+#   run
+#       tensorboard --logdir .\
+#   then open localhost in a web browser
 
 import os
 
