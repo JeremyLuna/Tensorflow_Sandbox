@@ -1,5 +1,0 @@
-Does it work on iPhones?
-Plant disease:
-  train longer
-  show Confidence for uploaded images (already done for live webcam)
-  show top 3 guesses
