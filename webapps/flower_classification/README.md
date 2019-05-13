@@ -8,6 +8,7 @@ To train on a dataset:
     the model is pretrained and downloaded from the INTERNET <3
   open train.py
     change image_dir to the path of your dataset
+    models can be chosen from https://tfhub.dev/s?module-type=image-classification
     change any of the parameters as you like
   from this directory, run
     python train.py
